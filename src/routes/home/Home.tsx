@@ -1,9 +1,9 @@
 import { FC, useState } from 'react';
-import Navbar from '../../components/common/navbar/Navbar';
 import Footer from '../../components/common/footer/Footer';
 import SlidingShowcase from '../../components/home/showcase/SlidingShowcase';
 import StationaryShowcase from '../../components/home/showcase/StationaryShowcase';
 import { PostType } from '../../types';
+import Page from '../../components/common/page/Page';
 
 interface SectionTitleProps {
   title: string;
@@ -28,8 +28,7 @@ const Home: FC = () => {
   ]);
 
   return (
-    <>
-      <Navbar />
+    <Page>
       <main className="bg-mygrey-100 dark:bg-mygrey-600 dark:text-mygrey-100">
         <SectionTitle title="Most Recent Posts" />
         <SlidingShowcase posts={recent} />
@@ -38,7 +37,7 @@ const Home: FC = () => {
         <StationaryShowcase posts={featured} columns={3} />
       </main>
       <Footer />
-    </>
+    </Page>
   );
 };
 
