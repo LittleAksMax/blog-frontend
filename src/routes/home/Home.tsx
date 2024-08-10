@@ -14,11 +14,11 @@ const SectionTitle: FC<SectionTitleProps> = ({ title }: SectionTitleProps) => (
 );
 
 const Home: FC = () => {
-  const [recent, setRecent] = useState<PostType[]>([
+  const [recent] = useState<PostType[]>([
     <p>Recent Post 1</p>,
     <p>Recent Post 2</p>,
   ]);
-  const [featured, setFeatured] = useState<PostType[]>([
+  const [featured] = useState<PostType[]>([
     <p>Featured Post 1</p>,
     <p>Featured Post 2</p>,
     <p>Featured Post 3</p>,

@@ -1,5 +1,7 @@
-import { FC, FormEvent, ReactNode } from 'react';
+import { Dispatch, FC, FormEvent, ReactNode, useState } from 'react';
 import Page from '../../common/page/Page';
+import { handleLogin } from './util';
+import { AuthProp } from '../../props';
 
 interface LoginInputProps {
   children?: ReactNode;
@@ -32,66 +34,98 @@ interface LoginInputBoxProps {
   type: 'email' | 'password';
   placeholder?: string;
   name: string;
+  get: string;
+  set: Dispatch<string>;
 }
 
 const LoginInputBox: FC<LoginInputBoxProps> = ({
   type,
   placeholder,
   name,
+  get,
+  set,
 }: LoginInputBoxProps) => (
   <input
     className="dark:bg-mygrey-600 outline-myorange-200 hover:outline-myorange-400 flex-1 p-1"
     name={name}
     type={type}
     placeholder={placeholder}
+    autoComplete="off"
+    value={get}
+    onChange={(e) => set(e.target.value)}
     required
   />
 );
 
 interface LoginSubmitProps {
   value: string;
-  onSubmit: (e: FormEvent) => boolean;
 }
 
-const LoginSubmit: FC<LoginSubmitProps> = ({
-  value,
-  onSubmit,
-}: LoginSubmitProps) => (
+const LoginSubmit: FC<LoginSubmitProps> = ({ value }: LoginSubmitProps) => (
   <input
     className="border-2 border-myorange-500 text-myorange-500 hover:text-mygrey-100 hover:bg-myorange-500 p-1 my-2 w-full"
     type="submit"
     value={value}
-    onSubmit={onSubmit}
   />
 );
 
-const LoginForm: FC = () => (
-  <form className="flex flex-col box-border">
-    <LoginInput>
-      <LoginLabel htmlFor="email">Email:</LoginLabel>
-      <LoginInputBox
-        name="email"
-        type="email"
-        placeholder="person@example.com"
-      />
-    </LoginInput>
-    <LoginInput>
-      <LoginLabel htmlFor="password">Password:</LoginLabel>
-      <LoginInputBox name="password" type="password" placeholder="password" />
-    </LoginInput>
-    <LoginInput>
-      {/* TODO: onSubmit */}
-      <LoginSubmit value="Log in" onSubmit={(e) => true} />
-    </LoginInput>
-  </form>
-);
+interface LoginFormProps extends AuthProp {}
 
-const Login: FC = () => {
+const LoginForm: FC<LoginFormProps> = ({ auth }: LoginFormProps) => {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+
+  const handleSubmit = async (e: FormEvent): Promise<boolean> => {
+    e.preventDefault();
+
+    // clear inputs in any case
+    setEmail('');
+    setPassword('');
+
+    return handleLogin(auth, email, password);
+  };
+
+  return (
+    <form
+      className="flex flex-col box-border"
+      action="#"
+      onSubmit={handleSubmit}
+    >
+      <LoginInput>
+        <LoginLabel htmlFor="email">Email:</LoginLabel>
+        <LoginInputBox
+          name="email"
+          type="email"
+          placeholder="person@example.com"
+          get={email}
+          set={setEmail}
+        />
+      </LoginInput>
+      <LoginInput>
+        <LoginLabel htmlFor="password">Password:</LoginLabel>
+        <LoginInputBox
+          name="password"
+          type="password"
+          placeholder="strong password"
+          get={password}
+          set={setPassword}
+        />
+      </LoginInput>
+      <LoginInput>
+        <LoginSubmit value="Log in" />
+      </LoginInput>
+    </form>
+  );
+};
+
+interface LoginProps extends AuthProp {}
+
+const Login: FC<LoginProps> = ({ auth }: LoginProps) => {
   return (
     <Page>
       <div>
-        <div className="mx-[25%] w-1/2 p-4 dark:bg-mygrey-800">
-          <LoginForm />
+        <div className="mx-[25%] w-1/2 p-4 m-4 dark:bg-mygrey-800 bg-mygrey-200 rounded-md">
+          <LoginForm auth={auth} />
         </div>
       </div>
     </Page>

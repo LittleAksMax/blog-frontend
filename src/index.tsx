@@ -3,13 +3,19 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import Auth from './auth/auth';
 
+// DOM root element
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+// Firebase facade object
+const auth = new Auth();
+
 root.render(
   <React.StrictMode>
-    <App />
+    <App auth={auth} />
   </React.StrictMode>
 );
 
