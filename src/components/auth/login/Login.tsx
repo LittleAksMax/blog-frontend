@@ -1,7 +1,10 @@
 import { Dispatch, FC, FormEvent, ReactNode, useState } from 'react';
 import Page from '../../common/page/Page';
-import { handleLogin } from './util';
-import { AuthProp } from '../../props';
+import { useAuth } from '../../../contexts';
+import { Navigate } from 'react-router-dom';
+import logger from '../../../logging';
+
+const NAMESPACE: string = 'components/auth/login/Login.tsx';
 
 interface LoginInputProps {
   children?: ReactNode;
@@ -69,9 +72,8 @@ const LoginSubmit: FC<LoginSubmitProps> = ({ value }: LoginSubmitProps) => (
   />
 );
 
-interface LoginFormProps extends AuthProp {}
-
-const LoginForm: FC<LoginFormProps> = ({ auth }: LoginFormProps) => {
+const LoginForm: FC = () => {
+  const { login, setUser } = useAuth();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -82,7 +84,22 @@ const LoginForm: FC<LoginFormProps> = ({ auth }: LoginFormProps) => {
     setEmail('');
     setPassword('');
 
-    return handleLogin(auth, email, password);
+    const [userCred, err] = await login(email, password);
+
+    if (err) {
+      alert('Invalid sign in.');
+      return false;
+    }
+
+    // userCred must be non-null at this point
+    // \?. just for compiler to be happy
+    if (userCred?.user == null) {
+      alert('Something went wrong on our end. Please try again later.');
+    }
+
+    logger.debug(NAMESPACE, 'User Credentials', userCred);
+    setUser(userCred);
+    return true;
   };
 
   return (
@@ -118,14 +135,19 @@ const LoginForm: FC<LoginFormProps> = ({ auth }: LoginFormProps) => {
   );
 };
 
-interface LoginProps extends AuthProp {}
+const Login: FC = () => {
+  const { user } = useAuth();
 
-const Login: FC<LoginProps> = ({ auth }: LoginProps) => {
+  // if we are logged in, we don't want to come back here
+  if (user) {
+    return <Navigate to="/" />;
+  }
+
   return (
     <Page>
       <div>
         <div className="mx-[25%] w-1/2 p-4 m-4 dark:bg-mygrey-800 bg-mygrey-200 rounded-md">
-          <LoginForm auth={auth} />
+          <LoginForm />
         </div>
       </div>
     </Page>

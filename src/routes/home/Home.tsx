@@ -1,5 +1,4 @@
 import { FC, useState } from 'react';
-import Footer from '../../components/common/footer/Footer';
 import SlidingShowcase from '../../components/home/showcase/SlidingShowcase';
 import StationaryShowcase from '../../components/home/showcase/StationaryShowcase';
 import { PostType } from '../../types';
@@ -36,7 +35,6 @@ const Home: FC = () => {
         <SectionTitle title="Featured Posts" />
         <StationaryShowcase posts={featured} columns={3} />
       </main>
-      <Footer />
     </Page>
   );
 };

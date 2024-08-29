@@ -1,6 +1,10 @@
 import { FC } from 'react';
 import ThemeToggle from './ThemeToggle';
 import { ChildrenProp } from '../../props';
+import { useAuth } from '../../../contexts';
+// import logger from '../../../logging';
+
+// const NAMESPACE: string = 'components/common/navbar/Navbar.tsx';
 
 interface NavbarSlotProps extends ChildrenProp {}
 
@@ -40,10 +44,6 @@ const NavbarLink: FC<NavbarLinkProps> = ({ value, href }: NavbarLinkProps) => (
   </NavbarItemInlineContainer>
 );
 
-interface NavbarProps {
-  loggedIn: boolean;
-}
-
 interface NavbarPartitionProps extends ChildrenProp {
   side: 'left' | 'right';
 }
@@ -58,7 +58,10 @@ const NavbarPartition: FC<NavbarPartitionProps> = ({
   return <ul className={style}>{children}</ul>;
 };
 
-const Navbar: FC<NavbarProps> = ({ loggedIn }: NavbarProps) => {
+const Navbar: FC = () => {
+  const { user } = useAuth();
+
+  // logger.debug(NAMESPACE, 'Auth handler', auth);
   return (
     <nav className="flex justify-evenly bg-mygrey-300 dark:bg-mygrey-700 p-4 dark:text-mygrey-100">
       <NavbarPartition side="left">
@@ -71,7 +74,7 @@ const Navbar: FC<NavbarProps> = ({ loggedIn }: NavbarProps) => {
           <ThemeToggle />
         </NavbarSlot>
         <NavbarSlot>
-          {!loggedIn ? (
+          {!user ? (
             <NavbarLink href="/login" value="Login" />
           ) : (
             <NavbarLink href="/logout" value="Log out" />

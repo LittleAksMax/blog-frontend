@@ -3,15 +3,16 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Auth from './auth/auth';
+import { initialiseFirebase } from './firebase';
+// import { getAnalytics } from 'firebase/analytics';
 
 // DOM root element
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-// Firebase facade object
-const auth = new Auth();
+// Firebase
+const { /* app, */ auth } = initialiseFirebase();
 
 root.render(
   <React.StrictMode>
