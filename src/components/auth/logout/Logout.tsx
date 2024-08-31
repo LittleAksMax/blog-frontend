@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { useAuth } from '../../../contexts';
+import { useAuth } from '../../../contexts/auth';
 import { Navigate } from 'react-router-dom';
 import Spinner from '../../common/spinner/Spinner';
 import logger from '../../../logging';
@@ -12,14 +12,24 @@ const Logout: FC = () => {
 
   useEffect(() => {
     if (!user) {
-      logout()
-        .catch((err) => {
-          logger.error(NAMESPACE, err.message);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      setLoading(false);
+      return;
     }
+
+    logout()
+      .then((result: boolean) => {
+        if (!result) {
+          throw new Error('False result when logging out.');
+        }
+      })
+      .catch((e) => {
+        if (e instanceof Error) {
+          logger.error(NAMESPACE, e.message);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [user, logout]);
 
   return !loading ? <Navigate to="/" /> : <Spinner />;

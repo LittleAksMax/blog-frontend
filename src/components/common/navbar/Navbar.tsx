@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import ThemeToggle from './ThemeToggle';
 import { ChildrenProp } from '../../props';
-import { useAuth } from '../../../contexts';
+import { useAuth } from '../../../contexts/auth';
 // import logger from '../../../logging';
 
 // const NAMESPACE: string = 'components/common/navbar/Navbar.tsx';

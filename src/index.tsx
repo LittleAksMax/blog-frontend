@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { initialiseFirebase } from './firebase';
+import { createBlogClient } from './sdk/client';
 // import { getAnalytics } from 'firebase/analytics';
 
 // DOM root element
@@ -14,9 +15,12 @@ const root = ReactDOM.createRoot(
 // Firebase
 const { /* app, */ auth } = initialiseFirebase();
 
+// SDK
+const blogClient = createBlogClient();
+
 root.render(
   <React.StrictMode>
-    <App auth={auth} />
+    <App auth={auth} client={blogClient} />
   </React.StrictMode>
 );
 

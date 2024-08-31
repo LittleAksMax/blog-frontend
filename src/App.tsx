@@ -7,24 +7,29 @@ import Logout from './components/auth/logout/Logout';
 import { Auth as FirebaseAuth } from 'firebase/auth';
 import AuthProvider from './providers/AuthProvider';
 import Post from './components/post/Post';
+import ApiProvider from './providers/ApiProvider';
+import { IBlogClient } from './sdk/client';
 
 interface AppProps {
   auth: FirebaseAuth;
+  client: IBlogClient;
 }
 
-const App: FC<AppProps> = ({ auth }: AppProps) => {
+const App: FC<AppProps> = ({ auth, client }: AppProps) => {
   return (
     <AuthProvider auth={auth}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/post/:id" element={<Post />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/logout" element={<Logout />} />
+      <ApiProvider client={client}>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/post/:id" element={<Post />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/logout" element={<Logout />} />
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Router>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Router>
+      </ApiProvider>
     </AuthProvider>
   );
 };

@@ -1,6 +1,6 @@
 import { Context, createContext, Dispatch, useContext } from 'react';
 // import { SignOutType, SignInType } from './auth/types';
-import { UserCredential } from 'firebase/auth';
+import { User, UserCredential } from 'firebase/auth';
 
 export type LoginType = (
   email: string,
@@ -10,8 +10,8 @@ export type LoginType = (
 export type LogoutType = () => Promise<boolean>;
 
 export type AuthContextType = {
-  user: UserCredential | null;
-  setUser: Dispatch<UserCredential | null>;
+  user: User | null;
+  setUser: Dispatch<User | null>;
   login: LoginType;
   logout: LogoutType;
 };

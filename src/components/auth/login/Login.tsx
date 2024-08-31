@@ -1,6 +1,6 @@
 import { Dispatch, FC, FormEvent, ReactNode, useState } from 'react';
 import Page from '../../common/page/Page';
-import { useAuth } from '../../../contexts';
+import { useAuth } from '../../../contexts/auth';
 import { Navigate } from 'react-router-dom';
 import logger from '../../../logging';
 
@@ -98,7 +98,7 @@ const LoginForm: FC = () => {
     }
 
     logger.debug(NAMESPACE, 'User Credentials', userCred);
-    setUser(userCred);
+    setUser(userCred.user);
     return true;
   };
 
