@@ -1,8 +1,8 @@
-import { FC, useState } from 'react';
+import { FC, useMemo } from 'react';
 import SlidingShowcase from '../../components/home/showcase/SlidingShowcase';
 import StationaryShowcase from '../../components/home/showcase/StationaryShowcase';
-import { PostType } from '../../types';
 import Page from '../../components/common/page/Page';
+import { Post } from '../../sdk/types';
 
 interface SectionTitleProps {
   title: string;
@@ -13,18 +13,8 @@ const SectionTitle: FC<SectionTitleProps> = ({ title }: SectionTitleProps) => (
 );
 
 const Home: FC = () => {
-  const [recent] = useState<PostType[]>([
-    <p>Recent Post 1</p>,
-    <p>Recent Post 2</p>,
-  ]);
-  const [featured] = useState<PostType[]>([
-    <p>Featured Post 1</p>,
-    <p>Featured Post 2</p>,
-    <p>Featured Post 3</p>,
-    <p>Featured Post 4</p>,
-    <p>Featured Post 5</p>,
-    <p>Featured Post 6</p>,
-  ]);
+  const recent = useMemo<Post[]>(() => [], []);
+  const featured = useMemo<Post[]>(() => [], []);
 
   return (
     <Page>

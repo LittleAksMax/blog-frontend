@@ -1,8 +1,16 @@
-import { Dispatch, FC, FormEvent, ReactNode, useState } from 'react';
+import {
+  Dispatch,
+  FC,
+  FormEvent,
+  ReactNode,
+  SetStateAction,
+  useState,
+} from 'react';
 import Page from '../../common/page/Page';
 import { useAuth } from '../../../contexts/auth';
 import { Navigate } from 'react-router-dom';
 import logger from '../../../logging';
+import Spinner from '../../common/spinner/Spinner';
 
 const NAMESPACE: string = 'components/auth/login/Login.tsx';
 
@@ -72,12 +80,17 @@ const LoginSubmit: FC<LoginSubmitProps> = ({ value }: LoginSubmitProps) => (
   />
 );
 
-const LoginForm: FC = () => {
+interface LoginFormProps {
+  setLoading: Dispatch<SetStateAction<boolean>>;
+}
+
+const LoginForm: FC<LoginFormProps> = ({ setLoading }) => {
   const { login, setUser } = useAuth();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
   const handleSubmit = async (e: FormEvent): Promise<boolean> => {
+    setLoading(true);
     e.preventDefault();
 
     // clear inputs in any case
@@ -99,6 +112,7 @@ const LoginForm: FC = () => {
 
     logger.debug(NAMESPACE, 'User Credentials', userCred);
     setUser(userCred.user);
+    setLoading(false);
     return true;
   };
 
@@ -137,6 +151,7 @@ const LoginForm: FC = () => {
 
 const Login: FC = () => {
   const { user } = useAuth();
+  const [loading, setLoading] = useState<boolean>(false);
 
   // if we are logged in, we don't want to come back here
   if (user) {
@@ -147,7 +162,7 @@ const Login: FC = () => {
     <Page>
       <div>
         <div className="mx-[25%] w-1/2 p-4 m-4 dark:bg-mygrey-800 bg-mygrey-200 rounded-md">
-          <LoginForm />
+          {!loading ? <LoginForm setLoading={setLoading} /> : <Spinner />}
         </div>
       </div>
     </Page>

@@ -1,8 +1,6 @@
 export type ThemeType = 'light' | 'dark';
 
-export type PostType = any; // TODO: more specific
-
-export interface FirebaseConfig {
+export type FirebaseConfig = {
   apiKey: string;
   authDomain: string;
   projectId: string;
@@ -10,4 +8,4 @@ export interface FirebaseConfig {
   messagingSenderId: string;
   appId: string;
   measurementId: string;
-}
+};
