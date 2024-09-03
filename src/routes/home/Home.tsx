@@ -39,10 +39,15 @@ const Home: FC = () => {
           <br />
           <button
             onClick={(_) => {
-              client.getOne({ idOrSlug: value });
+              client.delete(
+                { id: value },
+                {
+                  token: 'some-token',
+                }
+              );
             }}
           >
-            Get One
+            Delete One
           </button>
         </div>
       </main>
