@@ -3,7 +3,7 @@ import { IBlogClient } from '../sdk/client';
 
 export type ApiContextType = IBlogClient;
 
-export const useApi = (): ApiContextType => {
+export const useApiClient = (): ApiContextType => {
   return useContext(ApiContext);
 };
 

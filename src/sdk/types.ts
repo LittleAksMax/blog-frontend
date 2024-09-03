@@ -9,4 +9,5 @@ export type Post = {
   status: 'Draft' | 'Published' | 'Archived' | 'Deleted';
   published: Date;
   lastUpdated: Date;
+  featured: boolean;
 };

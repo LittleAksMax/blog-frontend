@@ -5,6 +5,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { initialiseFirebase } from './firebase';
 import { createBlogClient } from './sdk/client';
+import UrlFactory, { IUrlFactory } from './sdk/requests/UrlFactory';
+import config from './config';
 // import { getAnalytics } from 'firebase/analytics';
 
 // DOM root element
@@ -16,7 +18,8 @@ const root = ReactDOM.createRoot(
 const { /* app, */ auth } = initialiseFirebase();
 
 // SDK
-const blogClient = createBlogClient();
+const urlFactory: IUrlFactory = new UrlFactory(config.api.urlBase);
+const blogClient = createBlogClient(urlFactory);
 
 root.render(
   <React.StrictMode>

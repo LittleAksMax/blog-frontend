@@ -1,5 +1,3 @@
-import { stringList } from 'aws-sdk/clients/datapipeline';
-
 export type GetAllRequest = {
   title: string;
   tags: string[];

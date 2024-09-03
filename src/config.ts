@@ -2,10 +2,12 @@ import { FirebaseConfig } from './types';
 
 type ApiConfigType = {
   apiKey: string;
+  urlBase: string;
 };
 
 const api: ApiConfigType = {
   apiKey: process.env.REACT_APP_API_KEY || '',
+  urlBase: process.env.REACT_APP_API_BASE_URL || '',
 };
 
 const auth: FirebaseConfig = {
