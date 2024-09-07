@@ -1,3 +1,5 @@
+export type PostStatusType = 'Draft' | 'Published' | 'Archived' | 'Deleted';
+
 export type Post = {
   id: string;
   title: string;
@@ -6,7 +8,7 @@ export type Post = {
   media: string[];
   tags: string[];
   collections: string[];
-  status: 'Draft' | 'Published' | 'Archived' | 'Deleted';
+  status: PostStatusType;
   published: Date;
   lastUpdated: Date;
   featured: boolean;

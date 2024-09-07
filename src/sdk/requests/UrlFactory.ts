@@ -1,4 +1,5 @@
 import { VersionType } from '../client';
+import QueryBuilder from './QueryBuilder';
 import {
   CreateRequest,
   DeleteRequest,
@@ -8,12 +9,12 @@ import {
 } from './requests';
 
 export interface IUrlFactory {
-  setVersion: (version: VersionType) => void;
-  createGetOneUrl: (request: GetOneRequest) => string;
-  createGetAllUrl: (request: GetAllRequest) => string;
-  createCreateUrl: (request: CreateRequest) => string;
-  createUpdateUrl: (request: UpdateRequest) => string;
-  createDeleteUrl: (request: DeleteRequest) => string;
+  setVersion(version: VersionType): void;
+  createGetOneUrl(req: GetOneRequest): string;
+  createGetAllUrl(req: GetAllRequest): string;
+  createCreateUrl(req: CreateRequest): string;
+  createUpdateUrl(req: UpdateRequest): string;
+  createDeleteUrl(req: DeleteRequest): string;
 }
 
 class UrlFactory implements IUrlFactory {
@@ -24,30 +25,51 @@ class UrlFactory implements IUrlFactory {
     this.baseUrl = apiBaseUrl;
   }
 
-  public setVersion = (version: VersionType) => {
+  public setVersion(version: VersionType) {
     this.version = version;
-  };
+  }
 
-  public createGetAllUrl = (req: GetAllRequest) => {
-    // TODO: add query parameters
-    return `${this.baseUrl}/api/${this.version}/posts/`;
-  };
+  public createGetAllUrl(req: GetAllRequest) {
+    const queryBuilder = new QueryBuilder(
+      `${this.baseUrl}/api/${this.version}/posts/`
+    );
 
-  public createGetOneUrl = (req: GetOneRequest) => {
+    if (req.paginationFilter.pageSize) {
+      queryBuilder.add('page_size', req.paginationFilter.pageSize);
+    }
+    if (req.paginationFilter.pageNum) {
+      queryBuilder.add('page_num', req.paginationFilter.pageNum);
+    }
+    if (req.title && req.title.length > 0) {
+      queryBuilder.add('title', req.title);
+    }
+    if (req.tags && req.tags.length > 0) {
+      queryBuilder.addMany('tags', req.tags);
+    }
+    if (req.collections && req.collections.length > 0) {
+      queryBuilder.addMany('collections', req.collections);
+    }
+    if (req.featured) {
+      queryBuilder.add('featured', req.featured);
+    }
+    return queryBuilder.build();
+  }
+
+  public createGetOneUrl(req: GetOneRequest) {
     return `${this.baseUrl}/api/${this.version}/posts/${req.idOrSlug}`;
-  };
+  }
 
-  public createCreateUrl = (_: CreateRequest) => {
+  public createCreateUrl(_: CreateRequest) {
     return `${this.baseUrl}/api/${this.version}/posts/`;
-  };
+  }
 
-  public createUpdateUrl = (req: UpdateRequest) => {
+  public createUpdateUrl(req: UpdateRequest) {
     return `${this.baseUrl}/api/${this.version}/posts/${req.id}`;
-  };
+  }
 
-  public createDeleteUrl = (req: DeleteRequest) => {
+  public createDeleteUrl(req: DeleteRequest) {
     return `${this.baseUrl}/api/${this.version}/posts/${req.id}`;
-  };
+  }
 }
 
 export default UrlFactory;

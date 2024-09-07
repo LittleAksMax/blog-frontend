@@ -1,3 +1,7 @@
+import logger from '../../logging';
+
+const NAMESPACE: string = 'sdk/requests/util.ts';
+
 type RequestType = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 export const GET = 'GET';
@@ -8,8 +12,11 @@ export const DELETE = 'DELETE';
 export const makeRequest = async (
   method: RequestType,
   url: string,
-  bearerToken?: string
-): Promise<[any, Error | null]> => {
+  bearerToken?: string,
+  bodyObj?: object
+): Promise<[any, Headers, Error | null]> => {
+  let result: Response = null!;
+
   try {
     let headers = {};
 
@@ -18,17 +25,31 @@ export const makeRequest = async (
       headers = { ...headers, Authorization: `Bearer ${bearerToken}` };
     }
 
-    const result = await fetch(url, {
+    result = await fetch(url, {
       method,
       headers,
+      body: JSON.stringify(bodyObj),
     });
+
+    logger.debug(NAMESPACE, 'Request Result:', { result });
+
+    // error results should also get treated as errors
+    if (!result.ok) {
+      // TODO: proper error handling with different
+      // objects that are children of Error class
+      throw new Error(await result.text());
+    }
+
     const data = await result.json();
-    return [data, null];
+
+    logger.debug(NAMESPACE, 'Request JSON:', { data });
+
+    return [data, result.headers, null];
   } catch (e) {
     if (e instanceof Error) {
-      return [null, e];
+      return [null, result?.headers, e];
     } else {
-      return [null, null];
+      return [null, result?.headers, null];
     }
   }
 };

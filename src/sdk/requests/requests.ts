@@ -1,13 +1,14 @@
-export type GetAllRequest = {
-  title: string;
-  tags: string[];
-  collections: string[];
-  featured: boolean | null;
+type PaginationFilter = {
+  pageSize?: number;
+  pageNum?: number;
 };
 
-export type PaginationFilter = {
-  pageNum: number;
-  pageSize: number;
+export type GetAllRequest = {
+  title?: string;
+  tags?: string[];
+  collections?: string[];
+  featured?: boolean;
+  paginationFilter: PaginationFilter;
 };
 
 export type GetOneRequest = {

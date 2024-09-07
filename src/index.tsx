@@ -19,7 +19,7 @@ const { /* app, */ auth } = initialiseFirebase();
 
 // SDK
 const urlFactory: IUrlFactory = new UrlFactory(config.api.urlBase);
-const blogClient = createBlogClient(urlFactory);
+const blogClient = createBlogClient(urlFactory, auth);
 
 root.render(
   <React.StrictMode>

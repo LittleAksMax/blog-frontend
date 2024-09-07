@@ -85,7 +85,7 @@ interface LoginFormProps {
 }
 
 const LoginForm: FC<LoginFormProps> = ({ setLoading }) => {
-  const { login, setUser } = useAuth();
+  const { login, user, setUser } = useAuth();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
