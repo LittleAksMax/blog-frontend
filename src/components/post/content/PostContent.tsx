@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
 // TODO: remove
 // NOTE: we will split it on \n\n
@@ -22,7 +22,8 @@ interface PostContentProps {
   // TODO: media from S3
 }
 
-const PostContent: FC<PostContentProps> = ({ content }: PostContentProps) => {
+const PostContent: FC<PostContentProps> = (props: PostContentProps) => {
+  const content = useMemo(() => props.content, [props.content]);
   // TODO: parsing the content into paragraphs, maths blocks, and media
   return (
     <div className="mx-[20%] w-full">

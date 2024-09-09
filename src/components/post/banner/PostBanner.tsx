@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
 interface TagPillProps {
   tag: string;
@@ -18,8 +18,8 @@ const TagsContainer: FC<TagsContainerProps> = ({
   tags,
 }: TagsContainerProps) => (
   <ul className="flex flex-row flex-wrap">
-    {tags.map((tag: string) => (
-      <TagPill tag={tag} />
+    {tags.map((tag: string, idx: number) => (
+      <TagPill key={idx} tag={tag} />
     ))}
   </ul>
 );
@@ -78,13 +78,12 @@ interface PostBannerProps
     DatesContainerProps,
     AuthorProps {}
 
-const PostBanner: FC<PostBannerProps> = ({
-  title,
-  tags,
-  published,
-  lastModified,
-  author,
-}: PostBannerProps) => {
+const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
+  const title = useMemo(() => props.title, [props.title]);
+  const tags = useMemo(() => props.tags, [props.tags]);
+  const published = useMemo(() => props.published, [props.published]);
+  const lastModified = useMemo(() => props.lastModified, [props.lastModified]);
+  const author = useMemo(() => props.author, [props.author]);
   return (
     <div className="p-4">
       <Title title={title} />
