@@ -74,6 +74,9 @@ const Navbar: FC = () => {
           <ThemeToggle />
         </NavbarSlot>
         <NavbarSlot>
+          <NavbarLink href="/posts" value="Posts" />
+        </NavbarSlot>
+        <NavbarSlot>
           {!user ? (
             <NavbarLink href="/login" value="Login" />
           ) : (

@@ -1,11 +1,13 @@
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import SlidingShowcase from '../../components/home/showcase/SlidingShowcase';
 import StationaryShowcase from '../../components/home/showcase/StationaryShowcase';
 import Page from '../../components/common/page/Page';
 import { Post } from '../../sdk/types';
 import { useApiClient } from '../../contexts/api';
-import { useAuth } from '../../contexts/auth';
 import logger from '../../logging';
+import Spinner from '../../components/common/spinner/Spinner';
+
+const NAMESPACE: string = 'routes/home/Home.tsx';
 
 interface SectionTitleProps {
   title: string;
@@ -15,22 +17,91 @@ const SectionTitle: FC<SectionTitleProps> = ({ title }: SectionTitleProps) => (
   <h1 className="text-2xl ml-4">{title}</h1>
 );
 
+const NUM_FEATURED = 20;
+const NUM_RECENT = 15;
+
 const Home: FC = () => {
-  const recent = useMemo<Post[]>(() => [], []);
-  const featured = useMemo<Post[]>(() => [], []);
-  const auth = useAuth();
-  const client = useApiClient();
-  const [value, setValue] = useState<string>('');
-  const [valueDel, setValueDel] = useState<string>('');
+  const [recent, setRecent] = useState<Post[]>([]);
+  const [featured, setFeatured] = useState<Post[]>([]);
+  const [recentLoading, setRecentLoading] = useState<boolean>(true);
+  const [featuredLoading, setFeaturedLoading] = useState<boolean>(true);
+  const apiClient = useApiClient();
+
+  useEffect(() => {
+    Promise.all([
+      // get top featured posts
+      apiClient
+        .getAll(
+          {
+            paginationFilter: {
+              pageSize: NUM_FEATURED,
+              pageNum: 1,
+            },
+            featured: true,
+          },
+          false // force no authentication token => faster + no archived
+        )
+        .then(([posts, _count, _prev, _next, err]) => {
+          if (err) {
+            logger.error(NAMESPACE, err.message, err.stack);
+            setFeatured([]);
+            return;
+          }
+          setFeatured(posts);
+        })
+        .catch((err) => {
+          if (err instanceof Error) {
+            logger.error(NAMESPACE, err.message, err.stack);
+          }
+          setFeatured([]);
+        })
+        .finally(() => {
+          setFeaturedLoading(false);
+        }),
+
+      // get most recent posts
+      apiClient
+        .getAll(
+          {
+            paginationFilter: {
+              pageSize: NUM_RECENT,
+              pageNum: 1,
+            },
+          },
+          false // force no authentication token => faster + no archived
+        )
+        .then(([posts, _count, _prev, _next, err]) => {
+          if (err) {
+            logger.error(NAMESPACE, err.message, err.stack);
+            setRecent([]);
+            return;
+          }
+          setRecent(posts);
+        })
+        .catch((err) => {
+          if (err instanceof Error) {
+            logger.error(NAMESPACE, err.message, err.stack);
+          }
+          setRecent([]);
+        })
+        .finally(() => {
+          setRecentLoading(false);
+        }),
+    ]);
+  }, [apiClient]);
 
   return (
     <Page>
       <main className="bg-mygrey-100 dark:bg-mygrey-600 dark:text-mygrey-100">
         <SectionTitle title="Most Recent Posts" />
-        <SlidingShowcase posts={recent} />
+        {!recentLoading ? <SlidingShowcase posts={recent} /> : <Spinner />}
 
         <SectionTitle title="Featured Posts" />
-        <StationaryShowcase posts={featured} columns={3} />
+        {!featuredLoading ? (
+          <StationaryShowcase posts={featured} columns={3} />
+        ) : (
+          <Spinner />
+        )}
       </main>
     </Page>
   );

@@ -1,6 +1,7 @@
-import { FC, useState, MouseEvent } from 'react';
+import { FC, useState, useMemo } from 'react';
 import { ShowcaseProps } from './common';
 import ShowcaseItem from './showcaseItem/ShowcaseItem';
+import { ClickableProp } from '../../props';
 
 interface SlideshowPositionProps {
   index: number; // position (from 0)  (array index)
@@ -18,10 +19,9 @@ const SlideshowPosition: FC<SlideshowPositionProps> = ({
   );
 };
 
-interface ChangeSlideProps {
+interface ChangeSlideProps extends ClickableProp {
   disabled: boolean;
   direction: 'left' | 'right';
-  onClick: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 
 const ChangeSlide: FC<ChangeSlideProps> = ({
@@ -48,8 +48,9 @@ const SlidingShowcase: FC<SlidingShowcaseProps> = ({
   posts,
 }: SlidingShowcaseProps) => {
   const [index, setIndex] = useState<number>(0);
+  const showcasePosts = useMemo(() => posts, [posts]);
   // TODO: small screens => move change slide onto next line
-  if (posts.length === 0) {
+  if (showcasePosts.length === 0) {
     return (
       <div>
         <span>No posts to display</span>
@@ -64,14 +65,16 @@ const SlidingShowcase: FC<SlidingShowcaseProps> = ({
             direction="left"
             onClick={() => setIndex(index - 1)}
           />
-          <ShowcaseItem post={posts[index]} />
+          <div className="flex flex-grow w-full">
+            <ShowcaseItem post={showcasePosts[index]} />
+          </div>
           <ChangeSlide
-            disabled={index === posts.length - 1}
+            disabled={index === showcasePosts.length - 1}
             direction="right"
             onClick={() => setIndex(index + 1)}
           />
         </div>
-        <SlideshowPosition index={index} total={posts.length} />
+        <SlideshowPosition index={index} total={showcasePosts.length} />
       </div>
     );
   }

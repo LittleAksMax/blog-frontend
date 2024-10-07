@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { Post } from '../../../../sdk/types';
 
 interface PostCardProps {
@@ -7,7 +7,12 @@ interface PostCardProps {
 }
 
 const PostCard: FC<PostCardProps> = ({ post }: PostCardProps) => {
-  return <div>{post.title}</div>;
+  const url = useMemo(() => `/posts/${post.id}`, [post]);
+  return (
+    <span>
+      <a href={url}>{post.title}</a>
+    </span>
+  );
 };
 
 interface ShowcaseItemProps extends PostCardProps {
@@ -15,11 +20,7 @@ interface ShowcaseItemProps extends PostCardProps {
 }
 
 const ShowcaseItem: FC<ShowcaseItemProps> = ({ post }: ShowcaseItemProps) => {
-  return (
-    <div className="flex flex-grow w-full">
-      <PostCard post={post} />
-    </div>
-  );
+  return <PostCard post={post} />;
 };
 
 export default ShowcaseItem;

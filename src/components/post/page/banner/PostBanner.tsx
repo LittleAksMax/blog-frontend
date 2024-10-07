@@ -1,4 +1,5 @@
 import { FC, useMemo } from 'react';
+import { DeleteButton, UpdateButton } from '../../../common/general/buttons';
 
 interface TagPillProps {
   tag: string;
@@ -84,12 +85,25 @@ const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
   const published = useMemo(() => props.published, [props.published]);
   const lastModified = useMemo(() => props.lastModified, [props.lastModified]);
   const author = useMemo(() => props.author, [props.author]);
+
+  // TODO: archive, delete, and update buttons
+
   return (
     <div className="p-4">
       <Title title={title} />
       <TagsContainer tags={tags} />
       <DatesContainer published={published} lastModified={lastModified} />
       <Author author={author} />
+      <UpdateButton
+        onClick={() => {
+          console.log('Update');
+        }}
+      />
+      <DeleteButton
+        onClick={() => {
+          console.log('Delete');
+        }}
+      />
     </div>
   );
 };

@@ -14,7 +14,7 @@ export const makeRequest = async (
   url: string,
   bearerToken?: string,
   bodyObj?: object
-): Promise<[any, Headers, Error | null]> => {
+): Promise<[any, Error | null]> => {
   let result: Response = null!;
 
   try {
@@ -26,6 +26,7 @@ export const makeRequest = async (
     }
 
     result = await fetch(url, {
+      mode: 'cors',
       method,
       headers,
       body: JSON.stringify(bodyObj),
@@ -35,7 +36,6 @@ export const makeRequest = async (
 
     // error results should also get treated as errors
     if (!result.ok) {
-      // TODO: proper error handling with different
       // objects that are children of Error class
       throw new Error(await result.text());
     }
@@ -44,12 +44,12 @@ export const makeRequest = async (
 
     logger.debug(NAMESPACE, 'Request JSON:', { data });
 
-    return [data, result.headers, null];
+    return [data, null];
   } catch (e) {
     if (e instanceof Error) {
-      return [null, result?.headers, e];
+      return [null, e];
     } else {
-      return [null, result?.headers, null];
+      return [null, null];
     }
   }
 };

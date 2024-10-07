@@ -21,9 +21,10 @@ const newestClientVersion = (): VersionType => {
 
 export interface IBlogClient {
   getAll(
-    req: GetAllRequest
+    req: GetAllRequest,
+    useAuth?: boolean
   ): Promise<[Post[], number, string | null, string | null, Error | null]>;
-  getOne(req: GetOneRequest): Promise<[Post, Error | null]>;
+  getOne(req: GetOneRequest, useAuth?: boolean): Promise<[Post, Error | null]>;
   create(req: CreateRequest): Promise<[Post, Error | null]>;
   update(req: UpdateRequest): Promise<boolean>;
   delete(req: DeleteRequest): Promise<boolean>;
@@ -49,25 +50,45 @@ class BlogClient implements IBlogClient {
   }
 
   public async getAll(
-    req: GetAllRequest
+    req: GetAllRequest,
+    useAuth: boolean = true
   ): Promise<[Post[], number, string | null, string | null, Error | null]> {
     const url: string = this.urlFactory.createGetAllUrl(req);
-    const token = await this.firebaseAuth.currentUser?.getIdToken();
-    const [data, headers, err] = await makeRequest(GET, url, token);
+    let token: string | undefined;
+    if (useAuth) {
+      token = await this.firebaseAuth.currentUser?.getIdToken();
+    }
+
+    const [data, err] = await makeRequest(GET, url, token);
 
     if (err) {
       return [null!, null!, null, null, err];
     }
 
-    const totalCountHeader = headers.get(BlogClient.PaginationTotalCountHeader);
-    if (!totalCountHeader) {
-      throw new Error(`No header ${BlogClient.PaginationTotalCountHeader}`);
-    }
-    const totalCount = Number.parseInt(totalCountHeader);
-    const prev: string | null = data.prev;
-    const next: string | null = data.next;
-
     try {
+      if (
+        [
+          '_id',
+          'title',
+          'slug',
+          'content',
+          'media',
+          'tags',
+          'collections',
+          'status',
+          'published',
+          'last_updated',
+          'featured',
+          'total_count',
+        ].reduce<boolean>((prev, cur) => prev && cur in data, true)
+      ) {
+        throw new Error('some fields are missing from response body');
+      }
+      const totalCount: number = data.total_count;
+
+      const prev: string | null = data.prev;
+      const next: string | null = data.next;
+
       const posts: Post[] = data.data.map((x: any) => ({
         id: x._id as string,
         title: x.title as string,
@@ -88,10 +109,17 @@ class BlogClient implements IBlogClient {
     }
   }
 
-  public async getOne(req: GetOneRequest): Promise<[Post, Error | null]> {
+  public async getOne(
+    req: GetOneRequest,
+    useAuth: boolean = true
+  ): Promise<[Post, Error | null]> {
     const url: string = this.urlFactory.createGetOneUrl(req);
-    const token = await this.firebaseAuth.currentUser?.getIdToken();
-    const [data, _, err] = await makeRequest(GET, url, token);
+
+    let token: string | undefined;
+    if (useAuth) {
+      token = await this.firebaseAuth.currentUser?.getIdToken();
+    }
+    const [data, err] = await makeRequest(GET, url, token);
     if (err) {
       return [null!, err];
     }
@@ -118,7 +146,7 @@ class BlogClient implements IBlogClient {
   public async create(req: CreateRequest): Promise<[Post, Error | null]> {
     const url: string = this.urlFactory.createCreateUrl(req);
     const token = await this.firebaseAuth.currentUser?.getIdToken();
-    const [data, _, err] = await makeRequest(POST, url, token, req);
+    const [data, err] = await makeRequest(POST, url, token, req);
     logger.debug(NAMESPACE, 'Create result', { data, err });
     if (err) {
       return [null!, err];
@@ -144,7 +172,7 @@ class BlogClient implements IBlogClient {
   public async update(req: UpdateRequest): Promise<boolean> {
     const url: string = this.urlFactory.createUpdateUrl(req);
     const token = await this.firebaseAuth.currentUser?.getIdToken();
-    const [data, _, err] = await makeRequest(PUT, url, token, req);
+    const [data, err] = await makeRequest(PUT, url, token, req);
 
     logger.debug(NAMESPACE, 'Update result', { data, err });
 
@@ -158,7 +186,7 @@ class BlogClient implements IBlogClient {
   public async delete(req: DeleteRequest): Promise<boolean> {
     const url: string = this.urlFactory.createDeleteUrl(req);
     const token = await this.firebaseAuth.currentUser?.getIdToken();
-    const [data, _, err] = await makeRequest(DELETE, url, token);
+    const [data, err] = await makeRequest(DELETE, url, token);
 
     if (err) {
       logger.debug(NAMESPACE, 'Error', err);
