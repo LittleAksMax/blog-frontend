@@ -1,5 +1,10 @@
 import { FC, useMemo } from 'react';
-import { DeleteButton, UpdateButton } from '../../../common/general/buttons';
+import {
+  ArchiveButton,
+  DeleteButton,
+  UpdateButton,
+} from '../../common/general/buttons';
+import { useAuth } from '../../../contexts/auth';
 
 interface TagPillProps {
   tag: string;
@@ -80,6 +85,7 @@ interface PostBannerProps
     AuthorProps {}
 
 const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
+  const auth = useAuth();
   const title = useMemo(() => props.title, [props.title]);
   const tags = useMemo(() => props.tags, [props.tags]);
   const published = useMemo(() => props.published, [props.published]);
@@ -94,16 +100,25 @@ const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
       <TagsContainer tags={tags} />
       <DatesContainer published={published} lastModified={lastModified} />
       <Author author={author} />
-      <UpdateButton
-        onClick={() => {
-          console.log('Update');
-        }}
-      />
-      <DeleteButton
-        onClick={() => {
-          console.log('Delete');
-        }}
-      />
+      {auth.user !== null && (
+        <>
+          <UpdateButton
+            onClick={() => {
+              console.log('Update');
+            }}
+          />
+          <DeleteButton
+            onClick={() => {
+              console.log('Delete');
+            }}
+          />
+          <ArchiveButton
+            onClick={() => {
+              console.log('Archive');
+            }}
+          />
+        </>
+      )}
     </div>
   );
 };

@@ -47,3 +47,15 @@ export const UpdateButton: FC<UpdateButtonProps> = ({
     onClick={onClick}
   />
 );
+
+interface ArchiveButtonProps extends ClickableProp {}
+
+export const ArchiveButton: FC<ArchiveButtonProps> = ({
+  onClick,
+}: ArchiveButtonProps) => (
+  <Button
+    text="Archive"
+    className="p-1 border-2 bg-orange-600 border-orange-600 hover:bg-mygrey-100 text-mygrey-100 hover:text-orange-600"
+    onClick={onClick}
+  />
+);

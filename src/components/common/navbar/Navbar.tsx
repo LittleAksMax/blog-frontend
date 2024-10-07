@@ -26,7 +26,7 @@ const NavbarTitle: FC = () => (
       href="/"
       className="underline font-extrabold hover:text-myorange-500 text-3xl "
     >
-      DRB
+      Bloggington
     </a>
   </NavbarItemInlineContainer>
 );

@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import Page from '../../common/page/Page';
-import PostBanner from './banner/PostBanner';
-import PostContent from './content/PostContent';
+import PostBanner from './PostBanner';
+import PostContent from './PostContent';
 import { useParams } from 'react-router-dom';
 import { useApiClient } from '../../../contexts/api';
 import { Post } from '../../../sdk/types';

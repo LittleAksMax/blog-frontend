@@ -11,6 +11,10 @@ const StationaryShowcase: FC<StationaryShowcaseProps> = ({
   columns,
 }: StationaryShowcaseProps) => {
   const showcasePosts = useMemo(() => posts, [posts]);
+
+  // used for getting the columns right
+  let column = 0;
+
   return (
     <div
       className={`grid grid-flow-row sm:grid-cols-${columns} grid-cols-1 sm:grid-rows-${
@@ -18,9 +22,15 @@ const StationaryShowcase: FC<StationaryShowcaseProps> = ({
       } grid-rows-${posts.length}`}
     >
       <div className="">
-        {showcasePosts.map((post, idx) => (
-          <ShowcaseItem key={idx} post={post} />
-        ))}
+        {showcasePosts.map((post, idx) => {
+          return (
+            <>
+              <ShowcaseItem key={idx} post={post} />
+              {/* Conditionally render a break if required */}
+              {++column % columns === 0 && <br />}
+            </>
+          );
+        })}
       </div>
     </div>
   );

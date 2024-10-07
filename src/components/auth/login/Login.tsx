@@ -8,11 +8,11 @@ import {
 } from 'react';
 import Page from '../../common/page/Page';
 import { useAuth } from '../../../contexts/auth';
-import { Navigate } from 'react-router-dom';
-import logger from '../../../logging';
+import { Navigate, useNavigate } from 'react-router-dom';
 import Spinner from '../../common/spinner/Spinner';
+// import logger from '../../../logging';
 
-const NAMESPACE: string = 'components/auth/login/Login.tsx';
+// const NAMESPACE: string = 'components/auth/login/Login.tsx';
 
 interface LoginInputProps {
   children?: ReactNode;
@@ -88,6 +88,7 @@ const LoginForm: FC<LoginFormProps> = ({ setLoading }) => {
   const { login, setUser } = useAuth();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent): Promise<boolean> => {
     setLoading(true);
@@ -110,9 +111,15 @@ const LoginForm: FC<LoginFormProps> = ({ setLoading }) => {
       alert('Something went wrong on our end. Please try again later.');
     }
 
-    logger.debug(NAMESPACE, 'User Credentials', userCred);
+    // set required credential in context
     setUser(userCred.user);
+
+    // so we don't load anymore
     setLoading(false);
+
+    // move back to page that we logged in from
+    navigate(-1);
+
     return true;
   };
 

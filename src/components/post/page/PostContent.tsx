@@ -26,7 +26,7 @@ const PostContent: FC<PostContentProps> = (props: PostContentProps) => {
   const content = useMemo(() => props.content, [props.content]);
   // TODO: parsing the content into paragraphs, maths blocks, and media
   return (
-    <div className="mx-[20%] w-full">
+    <div className="mx-[20%] w-[80%]">
       <p>{content}</p>
     </div>
   );
