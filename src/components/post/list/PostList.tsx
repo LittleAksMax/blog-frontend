@@ -1,9 +1,10 @@
-import { Dispatch, FC, useEffect, useMemo, useState } from 'react';
+import { Dispatch, FC, useEffect, useState } from 'react';
 import { Post } from '../../../sdk/types';
 import { useApiClient } from '../../../contexts/api';
 import logger from '../../../logging';
 import Spinner from '../../common/spinner/Spinner';
 import { ChildrenProp } from '../../props';
+import PostCard from '../../common/general/PostCard';
 
 const NAMESPACE = 'components/post/list/PostList.tsx';
 
@@ -52,31 +53,23 @@ const PostList: FC<PostListProps> = ({ posts }: PostListProps) => {
   return (
     <ul>
       {posts.map((post, idx) => (
-        <PostListItem key={idx} post={post} />
+        <PostListItem key={idx}>
+          <PostCard post={post} />
+        </PostListItem>
       ))}
     </ul>
   );
 };
 
 interface PostListItemProps extends ChildrenProp {
-  post: Post;
   key: number | string;
 }
 
 const PostListItem: FC<PostListItemProps> = ({
-  post,
   key,
   children,
 }: PostListItemProps) => {
-  const url = useMemo(() => `/posts/${post.id}`, [post]);
-  return (
-    <li key={key}>
-      <span>
-        <a href={url}>{post.title}</a>
-      </span>
-      {children}
-    </li>
-  );
+  return <li key={key}>{children}</li>;
 };
 
 const PostListContainer: FC = () => {

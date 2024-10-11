@@ -1,19 +1,6 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import { Post } from '../../../../sdk/types';
-
-interface PostCardProps {
-  post: Post;
-  // TODO: background image
-}
-
-const PostCard: FC<PostCardProps> = ({ post }: PostCardProps) => {
-  const url = useMemo(() => `/posts/${post.id}`, [post]);
-  return (
-    <span>
-      <a href={url}>{post.title}</a>
-    </span>
-  );
-};
+import PostCard, { PostCardProps } from '../../../common/general/PostCard';
 
 interface ShowcaseItemProps extends PostCardProps {
   post: Post;

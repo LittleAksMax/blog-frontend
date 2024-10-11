@@ -42,36 +42,34 @@ const FooterColumnLink: FC<FooterColumnLinkProps> = ({
 
 const Footer: FC = () => {
   return (
-    <footer>
-      <div className="flex flex-nowrap flex-col sm:flex-row sm:justify-evenly bg-mygrey-200 dark:bg-mygrey-700 dark:text-mygrey-100">
-        <FooterColumn>
-          <FooterColumnHeader columnTitle="Contact" />
-          <FooterColumnLink
-            href="mailto:david2005.rosental.work@gmail.com"
-            placeholder="Email me"
-          />
-          <FooterColumnLink
-            href="https://www.linkedin.com/in/david-rosental/"
-            placeholder="LinkedIn"
-          />
-          <FooterColumnLink
-            href="https://www.github.com/LittleAksMax/"
-            placeholder="GitHub"
-          />
-        </FooterColumn>
-        <FooterColumn>
-          <FooterColumnHeader columnTitle="Navigation" />
-          <FooterColumnLink href="/" placeholder="Home" />
-        </FooterColumn>
-        <FooterColumn>
-          <FooterColumnHeader columnTitle="Other Projects" />
-          <FooterColumnLink
-            href="https://portfolio.davidrosental.co.uk"
-            placeholder="Personal Portfolio"
-          />
-        </FooterColumn>
-      </div>
-    </footer>
+    <div className="flex flex-nowrap flex-col sm:flex-row sm:justify-evenly bg-mygrey-200 dark:bg-mygrey-700 dark:text-mygrey-100">
+      <FooterColumn>
+        <FooterColumnHeader columnTitle="Contact" />
+        <FooterColumnLink
+          href="mailto:david2005.rosental.work@gmail.com"
+          placeholder="Email me"
+        />
+        <FooterColumnLink
+          href="https://www.linkedin.com/in/david-rosental/"
+          placeholder="LinkedIn"
+        />
+        <FooterColumnLink
+          href="https://www.github.com/LittleAksMax/"
+          placeholder="GitHub"
+        />
+      </FooterColumn>
+      <FooterColumn>
+        <FooterColumnHeader columnTitle="Navigation" />
+        <FooterColumnLink href="/" placeholder="Home" />
+      </FooterColumn>
+      <FooterColumn>
+        <FooterColumnHeader columnTitle="Other Projects" />
+        <FooterColumnLink
+          href="https://portfolio.davidrosental.co.uk"
+          placeholder="Personal Portfolio"
+        />
+      </FooterColumn>
+    </div>
   );
 };
 

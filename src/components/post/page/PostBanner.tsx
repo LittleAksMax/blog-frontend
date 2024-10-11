@@ -35,7 +35,9 @@ interface TitleProps {
 }
 
 const Title: FC<TitleProps> = ({ title }: TitleProps) => (
-  <h1 className="font-semibold text-lg">{title}</h1>
+  <h1 className="font-semibold text-lg text-myorange-600 dark:text-myorange-400">
+    {title}
+  </h1>
 );
 
 interface PostDateProps {
@@ -45,9 +47,13 @@ interface PostDateProps {
 
 const PostDate: FC<PostDateProps> = ({ label, date }: PostDateProps) => (
   <div>
-    <span>{label}</span>
+    <span>
+      <strong>{label}</strong>
+    </span>
     &nbsp;
-    <span>{date.toISOString()}</span>
+    <span>
+      <em>{date.toDateString()}</em>
+    </span>
   </div>
 );
 
@@ -62,7 +68,9 @@ const DatesContainer: FC<DatesContainerProps> = ({
 }: DatesContainerProps) => (
   <div>
     <PostDate label="Published" date={published} />
-    <PostDate label="Last modified" date={lastModified} />
+    {published.toString() !== lastModified.toString() && (
+      <PostDate label="Modified" date={lastModified} />
+    )}
   </div>
 );
 
@@ -72,9 +80,13 @@ interface AuthorProps {
 
 const Author: FC<AuthorProps> = ({ author }: AuthorProps) => (
   <div>
-    <span>By</span>
+    <span>
+      <strong>By</strong>
+    </span>
     &nbsp;
-    <span>{author}</span>
+    <span className="text-gray-500 dark:text-gray-300">
+      <em>{author}</em>
+    </span>
   </div>
 );
 

@@ -3,7 +3,7 @@ import { ShowcaseProps } from './common';
 import ShowcaseItem from './showcaseItem/ShowcaseItem';
 
 interface StationaryShowcaseProps extends ShowcaseProps {
-  columns: number;
+  columns: 1 | 2 | 3 | 4 | 5; // just some values
 }
 
 const StationaryShowcase: FC<StationaryShowcaseProps> = ({
@@ -12,27 +12,17 @@ const StationaryShowcase: FC<StationaryShowcaseProps> = ({
 }: StationaryShowcaseProps) => {
   const showcasePosts = useMemo(() => posts, [posts]);
 
-  // used for getting the columns right
-  let column = 0;
-
   return (
-    <div
-      className={`grid grid-flow-row sm:grid-cols-${columns} grid-cols-1 sm:grid-rows-${
-        posts.length / columns
-      } grid-rows-${posts.length}`}
-    >
-      <div className="">
-        {showcasePosts.map((post, idx) => {
-          return (
-            <>
-              <ShowcaseItem key={idx} post={post} />
-              {/* Conditionally render a break if required */}
-              {++column % columns === 0 && <br />}
-            </>
-          );
-        })}
-      </div>
-    </div>
+    <ul className="flex flex-wrap md:flex-row flex-col">
+      {showcasePosts.map((post, idx) => {
+        return (
+          // TODO: this doesn't work because of the interpolated string
+          <li key={idx} className={`md:w-1/${columns} w-full`}>
+            <ShowcaseItem post={post} />
+          </li>
+        );
+      })}
+    </ul>
   );
 };
 

@@ -1,7 +1,8 @@
 import { FC, useState, useMemo } from 'react';
 import { ShowcaseProps } from './common';
-import ShowcaseItem from './showcaseItem/ShowcaseItem';
 import { ClickableProp } from '../../props';
+import { Post } from '../../../sdk/types';
+import SlidingShowcaseItem from './showcaseItem/SlidingShowcaseItem';
 
 interface SlideshowPositionProps {
   index: number; // position (from 0)  (array index)
@@ -42,6 +43,11 @@ const ChangeSlide: FC<ChangeSlideProps> = ({
   );
 };
 
+const doesPostExist = (posts: Post[], index: number): boolean =>
+  index >= 0 && index < posts.length;
+
+const relativeSlideIndices = [-1, 0, 1];
+
 interface SlidingShowcaseProps extends ShowcaseProps {}
 
 const SlidingShowcase: FC<SlidingShowcaseProps> = ({
@@ -65,9 +71,31 @@ const SlidingShowcase: FC<SlidingShowcaseProps> = ({
             direction="left"
             onClick={() => setIndex(index - 1)}
           />
-          <div className="flex flex-grow w-full">
-            <ShowcaseItem post={showcasePosts[index]} />
-          </div>
+          <ul className="flex flex-row items-center justify-center flex-grow w-full h-full">
+            <div className="max-md:hidden w-full h-full">
+              {relativeSlideIndices.map((delta) =>
+                doesPostExist(posts, index + delta) ? (
+                  <li key={index + delta} className="inline-block h-full w-1/3">
+                    <SlidingShowcaseItem
+                      key={index}
+                      post={showcasePosts[index + delta]}
+                      main={delta === 0}
+                    />
+                  </li>
+                ) : (
+                  <li
+                    key={index + delta}
+                    className="inline-block h-full w-1/3"
+                  ></li>
+                )
+              )}
+            </div>
+            <div className="md:hidden w-full">
+              <div>
+                <SlidingShowcaseItem post={showcasePosts[index]} main />
+              </div>
+            </div>
+          </ul>
           <ChangeSlide
             disabled={index === showcasePosts.length - 1}
             direction="right"

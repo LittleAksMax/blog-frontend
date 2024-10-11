@@ -92,7 +92,6 @@ const Home: FC = () => {
 
   return (
     <Page>
-      <main className="bg-mygrey-100 dark:bg-mygrey-600 dark:text-mygrey-100">
         <SectionTitle title="Most Recent Posts" />
         {!recentLoading ? <SlidingShowcase posts={recent} /> : <Spinner />}
 
@@ -102,7 +101,6 @@ const Home: FC = () => {
         ) : (
           <Spinner />
         )}
-      </main>
     </Page>
   );
 };

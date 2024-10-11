@@ -1,13 +1,12 @@
 import { FC } from 'react';
 import PostListContainer from '../../components/post/list/PostList';
-import Navbar from '../../components/common/navbar/Navbar';
+import Page from '../../components/common/page/Page';
 
 const Posts: FC = () => {
   return (
-    <div>
-      <Navbar />
+    <Page>
       <PostListContainer />
-    </div>
+    </Page>
   );
 };
 

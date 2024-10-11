@@ -10,6 +10,8 @@ import Post from './components/post/page/Post';
 import ApiProvider from './providers/ApiProvider';
 import { IBlogClient } from './sdk/client';
 import Posts from './routes/posts/Posts';
+import PostEditor from './routes/update/PostEditor';
+import CreatePost from './routes/create/CreatePost';
 
 interface AppProps {
   auth: FirebaseAuth;
@@ -23,6 +25,8 @@ const App: FC<AppProps> = ({ auth, client }: AppProps) => {
         <Router>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/posts/create" element={<CreatePost />} />
+            <Route path="/posts/:id/editor" element={<PostEditor />} />
             <Route path="/posts/:id" element={<Post />} />
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
