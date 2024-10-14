@@ -52,25 +52,20 @@ interface PostListProps {
 const PostList: FC<PostListProps> = ({ posts }: PostListProps) => {
   return (
     <ul>
-      {posts.map((post, idx) => (
-        <PostListItem key={idx}>
-          <PostCard post={post} />
+      {posts.map((post) => (
+        <PostListItem key={post.id}>
+          <PostCard post={post} withButtons />
         </PostListItem>
       ))}
     </ul>
   );
 };
 
-interface PostListItemProps extends ChildrenProp {
-  key: number | string;
-}
+interface PostListItemProps extends ChildrenProp {}
 
 const PostListItem: FC<PostListItemProps> = ({
-  key,
   children,
-}: PostListItemProps) => {
-  return <li key={key}>{children}</li>;
-};
+}: PostListItemProps) => <li>{children}</li>;
 
 const PostListContainer: FC = () => {
   const apiClient = useApiClient();

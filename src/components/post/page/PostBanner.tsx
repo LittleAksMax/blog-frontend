@@ -52,7 +52,7 @@ const PostDate: FC<PostDateProps> = ({ label, date }: PostDateProps) => (
     </span>
     &nbsp;
     <span>
-      <em>{date.toDateString()}</em>
+      <em>{date.toLocaleDateString()}</em>
     </span>
   </div>
 );
@@ -68,8 +68,8 @@ const DatesContainer: FC<DatesContainerProps> = ({
 }: DatesContainerProps) => (
   <div>
     <PostDate label="Published" date={published} />
-    {published.toString() !== lastModified.toString() && (
-      <PostDate label="Modified" date={lastModified} />
+    {published.getTime() !== lastModified.getTime() && (
+      <PostDate label="Revised" date={lastModified} />
     )}
   </div>
 );

@@ -31,7 +31,7 @@ export const DeleteButton: FC<DeleteButtonProps> = ({
 }: DeleteButtonProps) => (
   <Button
     text="Delete"
-    className="p-1 border-2 bg-red-500 border-red-500 hover:bg-mygrey-100 text-mygrey-100 hover:text-red-500"
+    className="p-1 border-2 bg-red-400 border-red-400 hover:bg-mygrey-100 text-mygrey-100 hover:text-red-400"
     onClick={onClick}
   />
 );
@@ -43,7 +43,7 @@ export const UpdateButton: FC<UpdateButtonProps> = ({
 }: UpdateButtonProps) => (
   <Button
     text="Update"
-    className="p-1 border-2 bg-blue-500 border-blue-500 hover:bg-mygrey-100 text-mygrey-100 hover:text-blue-500"
+    className="p-1 border-2 bg-blue-400 border-blue-400 hover:bg-mygrey-100 text-mygrey-100 hover:text-blue-400"
     onClick={onClick}
   />
 );
@@ -55,7 +55,7 @@ export const ArchiveButton: FC<ArchiveButtonProps> = ({
 }: ArchiveButtonProps) => (
   <Button
     text="Archive"
-    className="p-1 border-2 bg-orange-600 border-orange-600 hover:bg-mygrey-100 text-mygrey-100 hover:text-orange-600"
+    className="p-1 border-2 bg-orange-500 border-orange-500 hover:bg-mygrey-100 text-mygrey-100 hover:text-orange-500"
     onClick={onClick}
   />
 );
