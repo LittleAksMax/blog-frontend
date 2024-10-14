@@ -46,7 +46,7 @@ interface LoginInputBoxProps {
   placeholder?: string;
   name: string;
   get: string;
-  set: Dispatch<string>;
+  set: Dispatch<SetStateAction<string>>;
 }
 
 const LoginInputBox: FC<LoginInputBoxProps> = ({

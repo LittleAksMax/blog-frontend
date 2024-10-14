@@ -1,7 +1,8 @@
-import { FC } from 'react';
+import { FC, useMemo, useState } from 'react';
 import ThemeToggle from './ThemeToggle';
 import { ChildrenProp } from '../../props';
 import { useAuth } from '../../../contexts/auth';
+import { ThemeType } from '../../../types';
 // import logger from '../../../logging';
 
 // const NAMESPACE: string = 'components/common/navbar/Navbar.tsx';
@@ -20,16 +21,18 @@ const NavbarItemInlineContainer: FC<NavbarItemInlineContainerProps> = ({
   <span className="p-2 hover:text-myorange-500 text-xl">{children}</span>
 );
 
-const NavbarTitle: FC = () => (
-  <NavbarItemInlineContainer>
-    <a
-      href="/"
-      className="underline font-extrabold hover:text-myorange-500 text-3xl "
-    >
-      DRB
+interface NavbarTitleProps {
+  mode: ThemeType | undefined;
+}
+
+const NavbarTitle: FC<NavbarTitleProps> = ({ mode }: NavbarTitleProps) => {
+  const logoUrl = useMemo(() => `/logo/drb-${mode ?? 'dark'}.svg`, [mode]);
+  return (
+    <a href="/">
+      <img src={logoUrl} alt="DRB Logo"></img>
     </a>
-  </NavbarItemInlineContainer>
-);
+  );
+};
 
 interface NavbarLinkProps {
   value: string;
@@ -60,18 +63,19 @@ const NavbarPartition: FC<NavbarPartitionProps> = ({
 
 const Navbar: FC = () => {
   const { user } = useAuth();
+  const [mode, setMode] = useState<ThemeType | undefined>(undefined);
 
   // logger.debug(NAMESPACE, 'Auth handler', auth);
   return (
     <nav className="flex justify-evenly bg-mygrey-300 dark:bg-mygrey-700 p-4 dark:text-mygrey-100">
       <NavbarPartition side="left">
         <NavbarSlot>
-          <NavbarTitle />
+          <NavbarTitle mode={mode} />
         </NavbarSlot>
       </NavbarPartition>
       <NavbarPartition side="right">
         <NavbarSlot>
-          <ThemeToggle />
+          <ThemeToggle mode={mode} setMode={setMode} />
         </NavbarSlot>
         <NavbarSlot>
           <NavbarLink href="/posts" value="Posts" />

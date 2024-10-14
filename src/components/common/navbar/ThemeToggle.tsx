@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useEffect, Dispatch, SetStateAction } from 'react';
 import { ThemeType } from '../../../types';
 
 const localStorageThemeKey = 'theme';
@@ -40,9 +40,15 @@ const getMatchingIcon = (theme: ThemeType | undefined) => {
   }
 };
 
-const ThemeToggle: FC = () => {
-  const [mode, setMode] = useState<ThemeType | undefined>();
+interface ThemeToggleProps {
+  mode: ThemeType | undefined;
+  setMode: Dispatch<SetStateAction<ThemeType | undefined>>;
+}
 
+const ThemeToggle: FC<ThemeToggleProps> = ({
+  mode,
+  setMode,
+}: ThemeToggleProps) => {
   // set initial theme
   useEffect(() => {
     const darkMode = document
@@ -59,7 +65,12 @@ const ThemeToggle: FC = () => {
         // unknown theme
         setMode(undefined);
     }
-  }, []);
+
+    // change svg logo accordingly by theme
+    document
+      .getElementById('icon')
+      ?.setAttribute('href', `/logo/drb-${mode}.svg`);
+  }, [mode, setMode]);
 
   const toggleTheme = () => {
     toggleHtmlThemeClassName();
