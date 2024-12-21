@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { initialiseFirebase } from './firebase';
-import { createBlogClient } from './sdk/client';
-import UrlFactory, { IUrlFactory } from './sdk/requests/UrlFactory';
+import { createBlogClient } from './sdk/api/client';
 import config from './config';
+import { createS3Client } from './sdk/s3/client';
+import { config as awsConfig, Credentials } from 'aws-sdk';
+import './index.css';
+
 // import { getAnalytics } from 'firebase/analytics';
 
 // DOM root element
@@ -17,13 +19,28 @@ const root = ReactDOM.createRoot(
 // Firebase
 const { /* app, */ auth } = initialiseFirebase();
 
-// SDK
-const urlFactory: IUrlFactory = new UrlFactory(config.api.urlBase);
-const blogClient = createBlogClient(urlFactory, auth);
+// API SDK
+const blogClient = createBlogClient(config.api.urlBase, auth);
+
+// S3 SDK
+// set AWS shared credentials file if in development
+if (config.mode === 'development') {
+  var credentials = new Credentials({
+    accessKeyId: config.s3.accessKeyId,
+    secretAccessKey: config.s3.secretAccessKey,
+  });
+  awsConfig.credentials = credentials;
+}
+const s3Client = createS3Client(config.s3.region, config.s3.bucketName);
 
 root.render(
   <React.StrictMode>
-    <App auth={auth} client={blogClient} />
+    <App
+      auth={auth}
+      client={blogClient}
+      s3Client={s3Client}
+      bucketName={config.s3.bucketName}
+    />
   </React.StrictMode>
 );
 

@@ -1,5 +1,5 @@
-import { Dispatch, FC, useEffect, useState } from 'react';
-import { Post } from '../../../sdk/types';
+import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
+import { Post } from '../../../sdk/api/types';
 import { useApiClient } from '../../../contexts/api';
 import logger from '../../../logging';
 import Spinner from '../../common/spinner/Spinner';
@@ -13,7 +13,7 @@ const PAGE_SIZE = 10;
 
 interface PageFilterProps {
   page: number;
-  setPage: Dispatch<number>;
+  setPage: Dispatch<SetStateAction<number>>;
   numPages: number;
 }
 

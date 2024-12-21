@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import SlidingShowcase from '../../components/home/showcase/SlidingShowcase';
 import StationaryShowcase from '../../components/home/showcase/StationaryShowcase';
 import Page from '../../components/common/page/Page';
-import { Post } from '../../sdk/types';
+import { Post } from '../../sdk/api/types';
 import { useApiClient } from '../../contexts/api';
 import logger from '../../logging';
 import Spinner from '../../components/common/spinner/Spinner';
@@ -92,15 +92,15 @@ const Home: FC = () => {
 
   return (
     <Page>
-        <SectionTitle title="Most Recent Posts" />
-        {!recentLoading ? <SlidingShowcase posts={recent} /> : <Spinner />}
+      <SectionTitle title="Most Recent Posts" />
+      {!recentLoading ? <SlidingShowcase posts={recent} /> : <Spinner />}
 
-        <SectionTitle title="Featured Posts" />
-        {!featuredLoading ? (
-          <StationaryShowcase posts={featured} columns={3} />
-        ) : (
-          <Spinner />
-        )}
+      <SectionTitle title="Featured Posts" />
+      {!featuredLoading ? (
+        <StationaryShowcase posts={featured} columns={3} />
+      ) : (
+        <Spinner />
+      )}
     </Page>
   );
 };

@@ -1,6 +1,6 @@
 export type ThemeType = 'light' | 'dark';
 
-export type FirebaseConfig = {
+export type FirebaseConfigType = {
   apiKey: string;
   authDomain: string;
   projectId: string;

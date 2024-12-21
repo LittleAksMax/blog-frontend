@@ -1,7 +1,7 @@
 import { FC, useState, useMemo } from 'react';
 import { ShowcaseProps } from './common';
 import { ClickableProp } from '../../props';
-import { Post } from '../../../sdk/types';
+import { Post } from '../../../sdk/api/types';
 import SlidingShowcaseItem from './showcaseItem/SlidingShowcaseItem';
 
 interface SlideshowPositionProps {

@@ -1,4 +1,4 @@
-import { Post } from '../sdk/types';
+import { Post } from '../sdk/api/types';
 
 /**
  * Linked objects used in the PostsCollection underlying

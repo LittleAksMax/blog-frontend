@@ -1,4 +1,3 @@
-import logger from '../logging';
 import {
   CreateRequest,
   DeleteRequest,
@@ -6,12 +5,13 @@ import {
   GetOneRequest,
   UpdateRequest,
 } from './requests/requests';
-import { IUrlFactory } from './requests/UrlFactory';
+import UrlFactory, { IUrlFactory } from './requests/UrlFactory';
 import { DELETE, GET, makeRequest, POST, PUT } from './requests/util';
 import { Post, PostStatusType } from './types';
 import { Auth as FirebaseAuth } from 'firebase/auth';
+// import logger from '../../logging';
 
-const NAMESPACE: string = 'sdk/client.ts';
+// const NAMESPACE: string = 'sdk/api/client.ts';
 
 export type VersionType = 'v1';
 
@@ -138,7 +138,7 @@ class BlogClient implements IBlogClient {
       featured: data.featured,
     };
 
-    logger.debug(NAMESPACE, 'Data obtained from request:', post);
+    // logger.debug(NAMESPACE, 'Data obtained from request:', post);
 
     return [post, null];
   }
@@ -147,7 +147,7 @@ class BlogClient implements IBlogClient {
     const url: string = this.urlFactory.createCreateUrl(req);
     const token = await this.firebaseAuth.currentUser?.getIdToken();
     const [data, err] = await makeRequest(POST, url, token, req);
-    logger.debug(NAMESPACE, 'Create result', { data, err });
+    // logger.debug(NAMESPACE, 'Create result', { data, err });
     if (err) {
       return [null!, err];
     }
@@ -174,7 +174,7 @@ class BlogClient implements IBlogClient {
     const token = await this.firebaseAuth.currentUser?.getIdToken();
     const [data, err] = await makeRequest(PUT, url, token, req);
 
-    logger.debug(NAMESPACE, 'Update result', { data, err });
+    // logger.debug(NAMESPACE, 'Update result', { data, err });
 
     if (err) {
       return false;
@@ -189,21 +189,22 @@ class BlogClient implements IBlogClient {
     const [data, err] = await makeRequest(DELETE, url, token);
 
     if (err) {
-      logger.debug(NAMESPACE, 'Error', err);
+      // logger.debug(NAMESPACE, 'Error', err);
       return false;
     }
 
     const success: boolean = data;
-    logger.debug(NAMESPACE, success ? 'true' : 'false');
+    // logger.debug(NAMESPACE, success ? 'true' : 'false');
     return success;
   }
 }
 
 export const createBlogClient = (
-  urlFactory: IUrlFactory,
+  urlBase: string,
   firebaseAuth: FirebaseAuth,
   version?: VersionType
 ): IBlogClient => {
+  const urlFactory: IUrlFactory = new UrlFactory(urlBase);
   return new BlogClient(urlFactory, firebaseAuth, version);
 };
 

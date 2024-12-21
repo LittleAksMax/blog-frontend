@@ -44,3 +44,12 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+# NOTE for deployment
+
+- You will need to create a new production S3 bucket
+  - This bucket will need CORS policy.
+  - This bucket will need permissions policy to only allow
+    certain actions from the origin with the domain of the domain of the deployed frontend.
+- You will need to check the bucket's ACL settings and make them as restrictive as possible
+  - For the dev bucket, I just toggled everything off

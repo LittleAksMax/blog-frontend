@@ -1,4 +1,4 @@
-import { Post } from '../../../sdk/types';
+import { Post } from '../../../sdk/api/types';
 
 export interface ShowcaseProps {
   posts: Post[];

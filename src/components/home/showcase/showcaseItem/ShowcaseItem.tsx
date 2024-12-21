@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Post } from '../../../../sdk/types';
+import { Post } from '../../../../sdk/api/types';
 import PostCard, { PostCardProps } from '../../../common/general/PostCard';
 
 interface ShowcaseItemProps extends PostCardProps {

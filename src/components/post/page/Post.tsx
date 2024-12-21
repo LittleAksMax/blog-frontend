@@ -4,7 +4,7 @@ import PostBanner from './PostBanner';
 import PostContent from './PostContent';
 import { useParams } from 'react-router-dom';
 import { useApiClient } from '../../../contexts/api';
-import { Post } from '../../../sdk/types';
+import { Post } from '../../../sdk/api/types';
 import { useAuth } from '../../../contexts/auth';
 import Spinner from '../../common/spinner/Spinner';
 import logger from '../../../logging';

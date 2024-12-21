@@ -1,5 +1,5 @@
 import { Context, createContext, useContext } from 'react';
-import { IBlogClient } from '../sdk/client';
+import { IBlogClient } from '../sdk/api/client';
 
 export type ApiContextType = IBlogClient;
 

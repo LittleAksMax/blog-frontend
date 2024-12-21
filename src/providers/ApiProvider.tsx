@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react';
 import { ApiContext } from '../contexts/api';
-import { IBlogClient } from '../sdk/client';
+import { IBlogClient } from '../sdk/api/client';
 
 interface ApiProviderProps {
   children?: ReactNode;

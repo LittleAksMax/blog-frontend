@@ -5,6 +5,9 @@ COPY package.json ./
 COPY yarn.lock ./
 RUN yarn install --frozen-lockfile
 COPY . .
+
+# NOTE: will need to add access key and whatever other environment variables somehow
+ENV NODE_ENV production
 RUN yarn build
 
 FROM nginxinc/nginx-unprivileged:bookworm-perl AS stager
