@@ -9,9 +9,9 @@ import UrlFactory, { IUrlFactory } from './requests/UrlFactory';
 import { DELETE, GET, makeRequest, POST, PUT } from './requests/util';
 import { Post, PostStatusType } from './types';
 import { Auth as FirebaseAuth } from 'firebase/auth';
-// import logger from '../../logging';
+import logger from '../../logging';
 
-// const NAMESPACE: string = 'sdk/api/client.ts';
+const NAMESPACE: string = 'sdk/api/client.ts';
 
 export type VersionType = 'v1';
 
@@ -193,12 +193,10 @@ class BlogClient implements IBlogClient {
     const [data, err] = await makeRequest(DELETE, url, token);
 
     if (err) {
-      // logger.debug(NAMESPACE, 'Error', err);
       return false;
     }
 
     const success: boolean = data;
-    // logger.debug(NAMESPACE, success ? 'true' : 'false');
     return success;
   }
 }

@@ -1,10 +1,12 @@
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 import {
   ArchiveButton,
   DeleteButton,
   UpdateButton,
 } from '../../common/general/buttons';
 import { useAuth } from '../../../contexts/auth';
+import { useApiClient } from '../../../contexts/api';
+import { Navigate } from 'react-router-dom';
 
 interface TagPillProps {
   tag: string;
@@ -94,17 +96,26 @@ interface PostBannerProps
   extends TagsContainerProps,
     TitleProps,
     DatesContainerProps,
-    AuthorProps {}
+    AuthorProps {
+  id: string;
+}
 
 const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
   const auth = useAuth();
+  const id = useMemo(() => props.id, [props.id]);
   const title = useMemo(() => props.title, [props.title]);
   const tags = useMemo(() => props.tags, [props.tags]);
   const published = useMemo(() => props.published, [props.published]);
   const lastModified = useMemo(() => props.lastModified, [props.lastModified]);
   const author = useMemo(() => props.author, [props.author]);
+  const apiClient = useApiClient();
 
-  // TODO: archive, delete, and update buttons
+  // TODO: delete, archive and update buttons
+  const [shouldRedirect, setShouldRedirect] = useState<boolean>(false);
+
+  if (shouldRedirect) {
+    return <Navigate to="/posts" />
+  }
 
   return (
     <div className="p-4">
@@ -120,8 +131,13 @@ const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
             }}
           />
           <DeleteButton
-            onClick={() => {
-              console.log('Delete');
+            onClick={async () => {
+              const success = await apiClient.delete({ id });
+              if (!success) {
+                alert('Could not delete post');
+              }
+              // TODO: modal
+              setShouldRedirect(true);
             }}
           />
           <ArchiveButton

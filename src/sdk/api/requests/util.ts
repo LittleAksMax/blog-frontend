@@ -1,6 +1,6 @@
-// import logger from '../../../logging';
+import logger from '../../../logging';
 
-// const NAMESPACE: string = 'sdk/requests/util.ts';
+const NAMESPACE: string = 'sdk/requests/util.ts';
 
 type RequestType = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
@@ -32,7 +32,7 @@ export const makeRequest = async (
       body: JSON.stringify(bodyObj),
     });
 
-    // logger.debug(NAMESPACE, 'Request Result:', { result });
+    logger.debug(NAMESPACE, 'Request Result:', { result });
 
     // error results should also get treated as errors
     if (!result.ok) {
@@ -40,7 +40,14 @@ export const makeRequest = async (
       throw new Error(await result.text());
     }
 
-    const data = await result.json();
+    // not all responses are directly in json format
+    let data;
+    try {
+      data = await result.json();
+    } catch (err) {
+      // usually those are ones that return just true/false
+      data = result.ok;
+    }
 
     // logger.debug(NAMESPACE, 'Request JSON:', { data });
 

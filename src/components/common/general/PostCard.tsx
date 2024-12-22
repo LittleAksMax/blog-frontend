@@ -33,7 +33,7 @@ const PostCard: FC<PostCardProps> = ({
         <a href={url}>
           <img
             src={imageUrl ? imageUrl : '/placeholder.svg'}
-            alt={`${post.title}`}
+            alt={post.title}
           />
           <span>{post.title}</span>
           <div>{children}</div>

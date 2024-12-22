@@ -68,7 +68,7 @@ const PostContent: FC<PostContentProps> = ({ post }: PostContentProps) => {
   return (
     <div className="mx-[20%] w-[80%]">
       {content.split('\n\n').map((section, idx) => (
-        <div key={idx}>
+        <div key={idx} className="w-[80%]">
           {getAppropriate(post, section, style, s3Client)}
         </div>
       ))}

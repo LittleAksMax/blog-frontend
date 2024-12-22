@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import Page from '../../common/page/Page';
 import PostBanner from './PostBanner';
 import PostContent from './PostContent';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { useApiClient } from '../../../contexts/api';
 import { Post } from '../../../sdk/api/types';
 import { useAuth } from '../../../contexts/auth';
@@ -47,11 +47,15 @@ const PostContainer: FC<PostContainerProps> = () => {
       });
   }, [user, apiClient, id]);
 
+  if (!loading && !post) {
+    return <Navigate to="/posts" />
+  }
   return (
     <Page>
       {!loading ? (
         <>
           <PostBanner
+            id={post?.id ?? ''}
             tags={post?.tags ?? []}
             title={post?.title ?? ''}
             published={post?.published ?? new Date(0)}
