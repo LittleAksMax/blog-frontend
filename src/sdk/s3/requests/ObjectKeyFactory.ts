@@ -11,9 +11,8 @@ class ObjectKeyFactory {
     }
 
     public createBannerObjectKey(post: Post): string {
-        // TODO: figure out standard for banner,
         // NOTE: might be easier to put banner as a field into Post
-        return `${post.slug}/shityourself.jpg`
+        return `${post.slug}/${post.banner}`
     }
 }
 

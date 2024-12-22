@@ -20,8 +20,6 @@ const PostContainer: FC<PostContainerProps> = () => {
   const apiClient = useApiClient();
   const { user } = useAuth();
 
-  // TODO: media from S3
-
   useEffect(() => {
     if (!id) {
       throw new Error('id route parameter not set');

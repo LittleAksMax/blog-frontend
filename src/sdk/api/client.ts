@@ -73,6 +73,7 @@ class BlogClient implements IBlogClient {
           'slug',
           'content',
           'media',
+          'banner',
           'tags',
           'collections',
           'status',
@@ -95,6 +96,7 @@ class BlogClient implements IBlogClient {
         slug: x.slug as string,
         content: x.content as string,
         media: x.media as string[],
+        banner: x.banner as string,
         tags: x.tags as string[],
         collections: x.collections as string[],
         status: x.status as PostStatusType,
@@ -130,6 +132,7 @@ class BlogClient implements IBlogClient {
       slug: data.slug,
       content: data.content,
       media: data.media,
+      banner: data.banner,
       tags: data.tags,
       collections: data.collections,
       status: data.status,
@@ -158,6 +161,7 @@ class BlogClient implements IBlogClient {
       slug: data.slug,
       content: data.content,
       media: data.media,
+      banner: data.banner,
       tags: data.tags,
       collections: data.collections,
       status: data.status,
@@ -172,7 +176,7 @@ class BlogClient implements IBlogClient {
   public async update(req: UpdateRequest): Promise<boolean> {
     const url: string = this.urlFactory.createUpdateUrl(req);
     const token = await this.firebaseAuth.currentUser?.getIdToken();
-    const [data, err] = await makeRequest(PUT, url, token, req);
+    const [, err] = await makeRequest(PUT, url, token, req); // ignore data returned field
 
     // logger.debug(NAMESPACE, 'Update result', { data, err });
 

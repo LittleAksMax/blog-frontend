@@ -20,11 +20,12 @@ class S3Client {
   }
 
   public getPostBannerUrl = async (post: Post): Promise<string> => {
-    logger.debug(NAMESPACE, this.bucketName);
+    // logger.debug(NAMESPACE, this.bucketName);
     const getParams: GetObjectRequest = {
       Bucket: this.bucketName,
       Key: this.objKeyFactory.createBannerObjectKey(post),
     };
+
     return this.s3.getSignedUrlPromise('getObject', getParams);
   };
 }
