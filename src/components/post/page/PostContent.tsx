@@ -7,6 +7,9 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { gruvboxDark, materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import 'katex/dist/katex.min.css'; // `rehype-katex` does not import the CSS for you
 import logger from '../../../logging';
+import { useS3 } from '../../../contexts/s3';
+import S3Client from '../../../sdk/s3/client';
+import { Post } from '../../../sdk/api/types';
 
 const NAMESPACE: string = 'components/post/page/PostContent';
 
@@ -30,11 +33,28 @@ const extractMarkdown = (section: string) => (
   </Markdown>
 )
 
-interface PostContentProps {
-  content: string;
+const extractImage = (post: Post, filename: string, s3Client: S3Client) => (
+  <img alt="media" src={s3Client.getMediaUrl(post, filename)} />
+)
+
+const getAppropriate = (post: Post, section: string, style: any, s3Client: S3Client) => {
+  // first match is whole string and second is
+  const matches = section.match(/!\[([\w_\-\. ]+)\]/);
+  logger.debug(NAMESPACE, 'matches', matches)
+  if (matches?.length === 2) {
+    return extractImage(post, matches[1], s3Client);
+  } else if (section.startsWith('~~~') && section.endsWith('~~~')) {
+    return extractCode(section, style);
+  } else {
+    return extractMarkdown(section);
+  }
 }
 
-const PostContent: FC<PostContentProps> = (props: PostContentProps) => {
+interface PostContentProps {
+  post: Post;
+}
+
+const PostContent: FC<PostContentProps> = ({ post }: PostContentProps) => {
   // styling of code, this is lazy and doesn't toggle automatically
   // when the theme is switched
   const [style, setStyle] = useState(gruvboxDark);
@@ -42,14 +62,14 @@ const PostContent: FC<PostContentProps> = (props: PostContentProps) => {
     setStyle(localStorage.getItem('theme') === 'dark' ? gruvboxDark : materialLight);
   }, []);
 
-  const content = useMemo(() => props.content, [props.content]);
+  const content = useMemo(() => post?.content ?? '', [post]);
+  const { s3Client } = useS3();
   // TODO: images and shit
   return (
     <div className="mx-[20%] w-[80%]">
       {content.split('\n\n').map((section, idx) => (
         <div key={idx}>
-          {section.startsWith('~~~') && section.endsWith('~~~')
-            ? extractCode(section, style) : extractMarkdown(section)}
+          {getAppropriate(post, section, style, s3Client)}
         </div>
       ))}
     </div>

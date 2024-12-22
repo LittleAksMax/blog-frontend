@@ -58,7 +58,7 @@ const PostContainer: FC<PostContainerProps> = () => {
             lastModified={post?.lastUpdated ?? new Date(0)}
             author={'David Rosental'}
           />
-          <PostContent content={post?.content ?? ''} />
+          {post && <PostContent post={post} />}
         </>
       ) : (
         <Spinner />

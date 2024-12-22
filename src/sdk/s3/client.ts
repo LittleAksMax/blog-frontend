@@ -19,15 +19,24 @@ class S3Client {
     this.objKeyFactory = objKeyFactory;
   }
 
-  public getPostBannerUrl = async (post: Post): Promise<string> => {
+  public getPostBannerUrl = (post: Post): string => {
     // logger.debug(NAMESPACE, this.bucketName);
     const getParams: GetObjectRequest = {
       Bucket: this.bucketName,
       Key: this.objKeyFactory.createBannerObjectKey(post),
     };
 
-    return this.s3.getSignedUrlPromise('getObject', getParams);
+    return this.s3.getSignedUrl('getObject', getParams);
   };
+
+  public getMediaUrl = (post: Post, mediaUrl: string): string => {
+    const getParams: GetObjectRequest = {
+      Bucket: this.bucketName,
+      Key: this.objKeyFactory.createObjectKey(post, mediaUrl),
+    };
+
+    return this.s3.getSignedUrl('getObject', getParams);
+  }
 }
 
 export const createS3Client = (

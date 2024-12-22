@@ -22,15 +22,7 @@ const PostCard: FC<PostCardProps> = ({
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    s3Client
-      .getPostBannerUrl(post)
-      .then((url: string) => {
-        // logger.debug(NAMESPACE, 'image url', { url });
-        setImageUrl(url);
-      })
-      .catch((err) => {
-        logger.error(NAMESPACE, 'Error occurred while fetching image URL', err);
-      });
+    setImageUrl(s3Client.getPostBannerUrl(post));
   }, [s3Client, post]);
 
   const auth = useAuth();
