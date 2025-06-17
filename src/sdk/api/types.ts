@@ -6,7 +6,7 @@ export type Post = {
   slug: string;
   content: string;
   media: string[];
-  banner: string; // object key from root of banner image
+  banner: string; // object key from root of banner image, empty if none exists
   tags: string[];
   collections: string[];
   status: PostStatusType;

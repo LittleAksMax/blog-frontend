@@ -23,7 +23,7 @@ class S3Client {
     // logger.debug(NAMESPACE, this.bucketName);
     const getParams: GetObjectRequest = {
       Bucket: this.bucketName,
-      Key: this.objKeyFactory.createBannerObjectKey(post),
+      Key: this.objKeyFactory.createBannerObjectKey(post) ?? '',
     };
 
     return this.s3.getSignedUrl('getObject', getParams);
@@ -32,11 +32,11 @@ class S3Client {
   public getMediaUrl = (post: Post, mediaUrl: string): string => {
     const getParams: GetObjectRequest = {
       Bucket: this.bucketName,
-      Key: this.objKeyFactory.createObjectKey(post, mediaUrl),
+      Key: this.objKeyFactory.createObjectKey(post, mediaUrl) ?? '',
     };
 
     return this.s3.getSignedUrl('getObject', getParams);
-  }
+  };
 }
 
 export const createS3Client = (

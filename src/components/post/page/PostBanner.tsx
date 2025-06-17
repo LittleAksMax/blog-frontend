@@ -124,7 +124,7 @@ const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
       <DatesContainer published={published} lastModified={lastModified} />
       <Author author={author} />
       {auth.user !== null && (
-        <>
+        <div className="flex flex-row">
           <UpdateButton
             onClick={() => {
               console.log('Update');
@@ -136,7 +136,6 @@ const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
               if (!success) {
                 alert('Could not delete post');
               }
-              // TODO: modal
               setShouldRedirect(true);
             }}
           />
@@ -145,7 +144,7 @@ const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
               console.log('Archive');
             }}
           />
-        </>
+        </div>
       )}
     </div>
   );

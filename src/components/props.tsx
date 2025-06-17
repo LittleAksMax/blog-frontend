@@ -5,5 +5,5 @@ export interface ChildrenProp {
 }
 
 export interface ClickableProp extends ChildrenProp {
-  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+  onClick?: () => void;
 }
