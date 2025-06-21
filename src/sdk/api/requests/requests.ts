@@ -3,6 +3,15 @@ type PaginationFilter = {
   pageNum?: number;
 };
 
+export const PostStatus = {
+  Draft: 'Draft',
+  Published: 'Published',
+  Archived: 'Archived',
+  Removed: 'Removed',
+};
+
+export type PostStatusType = 'Draft' | 'Published' | 'Archived' | 'Removed';
+
 export type GetAllRequest = {
   title?: string;
   tags?: string[];
@@ -29,8 +38,12 @@ export type UpdateRequest = {
   content: string;
   collections: string[];
   tags: string[];
-  status: 'Draft' | 'Published' | 'Archived' | 'Removed';
+  status: PostStatusType;
   featured: boolean;
+};
+
+export type ArchiveRequest = {
+  id: string;
 };
 
 export type DeleteRequest = {

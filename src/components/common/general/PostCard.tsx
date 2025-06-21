@@ -5,11 +5,12 @@ import { useAuth } from '../../../contexts/auth';
 import { ChildrenProp } from '../../props';
 import { useS3 } from '../../../contexts/s3';
 import { useApiClient } from '../../../contexts/api';
+import { PostDOMManipulation } from './interfaces';
 
 // const NAMESPACE: string = 'components/common/general/PostCard.tsx';
 const PLACEHOLDER_URL: string = '/placeholder.svg';
 
-export interface PostCardProps extends ChildrenProp {
+export interface PostCardProps extends ChildrenProp, PostDOMManipulation {
   post: Post;
   withButtons?: boolean;
 }
@@ -17,6 +18,8 @@ export interface PostCardProps extends ChildrenProp {
 const PostCard: FC<PostCardProps> = ({
   post,
   withButtons,
+  removePost,
+  archivePost,
   children,
 }: PostCardProps) => {
   const { s3Client } = useS3();
@@ -51,10 +54,25 @@ const PostCard: FC<PostCardProps> = ({
               if (!success) {
                 alert('Could not delete post');
               }
-              // TODO: change DOM to remove this post
+
+              // if there is an action to perform, then perform it
+              if (withButtons && removePost) {
+                removePost(post);
+              }
             }}
           />
-          <ArchiveButton />
+          {post.status !== 'Archived' && (
+            <ArchiveButton
+              onClick={async () => {
+                // TODO: archive using SDK
+                const success = await apiClient.archive(post); // TODO: implement ts
+                // if there is an action to perform, then perform it
+                if (withButtons && archivePost) {
+                  archivePost(post);
+                }
+              }}
+            />
+          )}
         </div>
       )}
     </div>

@@ -1,6 +1,7 @@
 import { VersionType } from '../client';
 import QueryBuilder from './QueryBuilder';
 import {
+  ArchiveRequest,
   CreateRequest,
   DeleteRequest,
   GetAllRequest,
@@ -14,6 +15,7 @@ export interface IUrlFactory {
   createGetAllUrl(req: GetAllRequest): string;
   createCreateUrl(req: CreateRequest): string;
   createUpdateUrl(req: UpdateRequest): string;
+  createArchiveUrl(req: ArchiveRequest): string;
   createDeleteUrl(req: DeleteRequest): string;
 }
 
@@ -65,6 +67,10 @@ class UrlFactory implements IUrlFactory {
 
   public createUpdateUrl(req: UpdateRequest) {
     return `${this.baseUrl}/api/${this.version}/posts/${req.id}`;
+  }
+
+  public createArchiveUrl(req: ArchiveRequest): string {
+    return `${this.baseUrl}/api/${req.id}/archive`;
   }
 
   public createDeleteUrl(req: DeleteRequest) {

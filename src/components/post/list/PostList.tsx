@@ -5,6 +5,7 @@ import logger from '../../../logging';
 import Spinner from '../../common/spinner/Spinner';
 import { ChildrenProp } from '../../props';
 import PostCard from '../../common/general/PostCard';
+import { PostDOMManipulation } from '../../common/general/interfaces';
 
 const NAMESPACE = 'components/post/list/PostList.tsx';
 
@@ -45,16 +46,25 @@ const PageFilter: FC<PageFilterProps> = ({
   </div>
 );
 
-interface PostListProps {
+interface PostListProps extends PostDOMManipulation {
   posts: Post[];
 }
 
-const PostList: FC<PostListProps> = ({ posts }: PostListProps) => {
+const PostList: FC<PostListProps> = ({
+  posts,
+  removePost,
+  archivePost,
+}: PostListProps) => {
   return (
     <ul>
       {posts.map((post) => (
         <PostListItem key={post.id}>
-          <PostCard post={post} withButtons />
+          <PostCard
+            post={post}
+            withButtons
+            removePost={removePost}
+            archivePost={archivePost}
+          />
         </PostListItem>
       ))}
     </ul>
@@ -72,11 +82,13 @@ const PostListContainer: FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(START_PAGE);
   const [posts, setPosts] = useState<Post[]>([]);
+  const [archivedPosts, setArchivedPosts] = useState<Post[] | null>(null);
   const [numPages, setNumPages] = useState<number>(1);
 
   useEffect(() => {
     setLoading(true);
 
+    // get posts which are published
     apiClient
       .getAll({
         paginationFilter: {
@@ -109,7 +121,21 @@ const PostListContainer: FC = () => {
   return (
     <div className="mv-[1/4]">
       <PageFilter page={page} setPage={setPage} numPages={numPages} />
-      {!loading ? <PostList posts={posts} /> : <Spinner />}
+      {!loading ? (
+        <PostList
+          posts={posts}
+          removePost={(post) => {
+            // filter out posts which don't match removed post
+            setPosts(posts.filter((p) => p.id !== post.id));
+          }}
+          archivePost={(post) => {
+            // filter out posts which don't match archived post
+            setPosts(posts.filter((p) => p.id !== post.id));
+          }}
+        />
+      ) : (
+        <Spinner />
+      )}
     </div>
   );
 };

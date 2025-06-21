@@ -1,4 +1,5 @@
 import {
+  ArchiveRequest,
   CreateRequest,
   DeleteRequest,
   GetAllRequest,
@@ -27,6 +28,7 @@ export interface IBlogClient {
   getOne(req: GetOneRequest, useAuth?: boolean): Promise<[Post, Error | null]>;
   create(req: CreateRequest): Promise<[Post, Error | null]>;
   update(req: UpdateRequest): Promise<boolean>;
+  archive(req: ArchiveRequest): Promise<boolean>;
   delete(req: DeleteRequest): Promise<boolean>;
 }
 
@@ -179,6 +181,19 @@ class BlogClient implements IBlogClient {
     const [, err] = await makeRequest(PUT, url, token, req); // ignore data returned field
 
     // logger.debug(NAMESPACE, 'Update result', { data, err });
+
+    if (err) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public async archive(req: ArchiveRequest): Promise<boolean> {
+    const url: string = this.urlFactory.createArchiveUrl(req);
+    const token = await this.firebaseAuth.currentUser?.getIdToken();
+
+    const [, err] = await makeRequest(PUT, url, token, req); // ignore data returned field
 
     if (err) {
       return false;

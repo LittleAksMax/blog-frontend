@@ -22,7 +22,10 @@ export const makeRequest = async (
 
     // set Authorization header if we have a token
     if (bearerToken) {
-      headers = { ...headers, Authorization: `Bearer ${bearerToken}` };
+      headers = {
+        ...headers,
+        Authorization: `Bearer ${bearerToken}`,
+      };
     }
 
     result = await fetch(url, {
