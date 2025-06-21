@@ -1,16 +1,9 @@
+import { PostStatusType } from '../types';
+
 type PaginationFilter = {
   pageSize?: number;
   pageNum?: number;
 };
-
-export const PostStatus = {
-  Draft: 'Draft',
-  Published: 'Published',
-  Archived: 'Archived',
-  Removed: 'Removed',
-};
-
-export type PostStatusType = 'Draft' | 'Published' | 'Archived' | 'Removed';
 
 export type GetAllRequest = {
   title?: string;

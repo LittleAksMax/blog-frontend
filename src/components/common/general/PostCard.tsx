@@ -46,7 +46,7 @@ const PostCard: FC<PostCardProps> = ({
       </div>
       {withButtons && auth.user && (
         <div className="flex flex-row">
-          {/* TODO: button implementations */}
+          {/* TODO: update button implementations */}
           <UpdateButton />
           <DeleteButton
             onClick={async () => {

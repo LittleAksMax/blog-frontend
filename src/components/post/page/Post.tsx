@@ -48,7 +48,7 @@ const PostContainer: FC<PostContainerProps> = () => {
   }, [user, apiClient, id]);
 
   if (!loading && !post) {
-    return <Navigate to="/posts" />
+    return <Navigate to="/posts" />;
   }
   return (
     <Page>
@@ -61,6 +61,7 @@ const PostContainer: FC<PostContainerProps> = () => {
             published={post?.published ?? new Date(0)}
             lastModified={post?.lastUpdated ?? new Date(0)}
             author={'David Rosental'}
+            status={post?.status ?? 'Published'}
           />
           {post && <PostContent post={post} />}
         </>

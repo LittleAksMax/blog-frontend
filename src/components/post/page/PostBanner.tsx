@@ -7,6 +7,7 @@ import {
 import { useAuth } from '../../../contexts/auth';
 import { useApiClient } from '../../../contexts/api';
 import { Navigate } from 'react-router-dom';
+import { PostStatusType } from '../../../sdk/api/types';
 
 interface TagPillProps {
   tag: string;
@@ -98,6 +99,7 @@ interface PostBannerProps
     DatesContainerProps,
     AuthorProps {
   id: string;
+  status: PostStatusType;
 }
 
 const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
@@ -108,13 +110,13 @@ const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
   const published = useMemo(() => props.published, [props.published]);
   const lastModified = useMemo(() => props.lastModified, [props.lastModified]);
   const author = useMemo(() => props.author, [props.author]);
+  const status = useMemo(() => props.status, [props.status]);
   const apiClient = useApiClient();
 
-  // TODO: delete, archive and update buttons
   const [shouldRedirect, setShouldRedirect] = useState<boolean>(false);
 
   if (shouldRedirect) {
-    return <Navigate to="/posts" />
+    return <Navigate to="/posts" />;
   }
 
   return (
@@ -126,7 +128,8 @@ const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
       {auth.user !== null && (
         <div className="flex flex-row">
           <UpdateButton
-            onClick={() => {
+            onClick={async () => {
+              // TODO: implement
               console.log('Update');
             }}
           />
@@ -139,11 +142,17 @@ const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
               setShouldRedirect(true);
             }}
           />
-          <ArchiveButton
-            onClick={() => {
-              console.log('Archive');
-            }}
-          />
+          {status !== 'Archived' && (
+            <ArchiveButton
+              onClick={async () => {
+                const success = await apiClient.archive({ id });
+                if (!success) {
+                  alert('Could not archive post');
+                }
+                setShouldRedirect(true);
+              }}
+            />
+          )}
         </div>
       )}
     </div>
