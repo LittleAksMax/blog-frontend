@@ -64,8 +64,11 @@ const PostCard: FC<PostCardProps> = ({
           {post.status !== 'Archived' && (
             <ArchiveButton
               onClick={async () => {
-                // TODO: archive using SDK
-                const success = await apiClient.archive(post); // TODO: implement ts
+                const success = await apiClient.archive(post);
+                if (!success) {
+                  alert('Could not archive post');
+                }
+
                 // if there is an action to perform, then perform it
                 if (withButtons && archivePost) {
                   archivePost(post);
