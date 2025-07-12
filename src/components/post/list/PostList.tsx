@@ -82,7 +82,6 @@ const PostListContainer: FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(START_PAGE);
   const [posts, setPosts] = useState<Post[]>([]);
-  const [archivedPosts, setArchivedPosts] = useState<Post[] | null>(null);
   const [numPages, setNumPages] = useState<number>(1);
 
   useEffect(() => {

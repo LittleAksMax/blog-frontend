@@ -68,10 +68,12 @@ const PostContainer: FC<PostContainerProps> = () => {
           />
           {/* Logged in user can choose to edit the post */}
           {user && (
-            <EditModeToggle
-              editMode={editMode}
-              toggleEditMode={() => setEditMode(!editMode)}
-            />
+            <div className="flex justify-center my-4">
+              <EditModeToggle
+                editMode={editMode}
+                toggleEditMode={() => setEditMode(!editMode)}
+              />
+            </div>
           )}
           {/* Not logged/not editing => show regular page. */}
           {post &&

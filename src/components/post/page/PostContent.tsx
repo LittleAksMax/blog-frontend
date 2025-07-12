@@ -50,7 +50,7 @@ const getAppropriate = (
   s3Client: S3Client
 ) => {
   // first match is whole string and second is
-  const matches = section.match(/!\[([\w_\-\. ]+)\]/);
+  const matches = section.match(/!\[([\w_\-. ]+)\]/);
   logger.debug(NAMESPACE, 'matches', matches);
   if (matches?.length === 2) {
     return extractImage(post, matches[1], s3Client);

@@ -40,7 +40,9 @@ const PostCard: FC<PostCardProps> = ({
       <div>
         <a href={url}>
           <img src={imageUrl} alt={post.title} />
-          <span>{post.title}</span>
+          <span>
+            {post.title + (post.status === 'Archived' ? ' (archived)' : '')}
+          </span>
           <div>{children}</div>
         </a>
       </div>

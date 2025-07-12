@@ -127,7 +127,7 @@ const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-2">
-        <Title title={title} />
+        <Title title={title + (status === 'Archived' ? ' (archived)' : '')} />
         <BackButton
           text="Back to all posts"
           onClick={() => {
