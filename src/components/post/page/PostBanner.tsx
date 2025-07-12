@@ -1,12 +1,13 @@
 import { FC, useMemo, useState } from 'react';
 import {
   ArchiveButton,
+  BackButton,
   DeleteButton,
   UpdateButton,
 } from '../../common/general/buttons';
 import { useAuth } from '../../../contexts/auth';
 import { useApiClient } from '../../../contexts/api';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { PostStatusType } from '../../../sdk/api/types';
 
 interface TagPillProps {
@@ -111,6 +112,10 @@ const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
   const lastModified = useMemo(() => props.lastModified, [props.lastModified]);
   const author = useMemo(() => props.author, [props.author]);
   const status = useMemo(() => props.status, [props.status]);
+
+  // for redirecting when the 'Back to all posts' button is clicked
+  const navigate = useNavigate();
+
   const apiClient = useApiClient();
 
   const [shouldRedirect, setShouldRedirect] = useState<boolean>(false);
@@ -121,7 +126,15 @@ const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
 
   return (
     <div className="p-4">
-      <Title title={title} />
+      <div className="flex justify-between items-center mb-2">
+        <Title title={title} />
+        <BackButton
+          text="Back to all posts"
+          onClick={() => {
+            navigate('/posts');
+          }}
+        />
+      </div>
       <TagsContainer tags={tags} />
       <DatesContainer published={published} lastModified={lastModified} />
       <Author author={author} />

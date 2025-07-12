@@ -113,7 +113,6 @@ export const SaveButton: FC<SaveButtonProps> = ({
     text="Save"
     className="p-2 border-2 bg-green-500 border-green-500 hover:bg-mygrey-100 text-mygrey-100 hover:text-green-500"
     onClick={onClick}
-    hasModal
   />
 );
 
@@ -126,6 +125,20 @@ export const CancelButton: FC<CancelButtonProps> = ({
     text="Cancel"
     className="p-2 border-2 bg-mygrey-400 border-mygrey-400 hover:bg-mygrey-100 text-mygrey-100 hover:text-mygrey-400"
     onClick={onClick}
-    hasModal
+  />
+);
+
+interface BackButtonProps extends ClickableProp {
+  text: string;
+}
+
+export const BackButton: FC<BackButtonProps> = ({
+  text,
+  onClick,
+}: BackButtonProps) => (
+  <Button
+    text={text}
+    className="p-2 border-2 bg-mygrey-400 border-mygrey-400 text-mygrey-100"
+    onClick={onClick}
   />
 );
