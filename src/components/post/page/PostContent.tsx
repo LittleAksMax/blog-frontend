@@ -4,7 +4,10 @@ import remarkGfm from 'remark-gfm';
 import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { gruvboxDark, materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import {
+  gruvboxDark,
+  materialLight,
+} from 'react-syntax-highlighter/dist/esm/styles/prism';
 import 'katex/dist/katex.min.css'; // `rehype-katex` does not import the CSS for you
 import logger from '../../../logging';
 import { useS3 } from '../../../contexts/s3';
@@ -19,10 +22,13 @@ const extractCode = (section: string, style: any) => (
       language={section.slice(3, section.indexOf('\n'))} // section after ~~~[lang]
       style={style}
       PreTag="div"
-      children={section.substring(section.indexOf('\n') + 1, section.length - 3)} // strips ~~~[lang] from beginning and ~~~ from end
+      children={section.substring(
+        section.indexOf('\n') + 1,
+        section.length - 3
+      )} // strips ~~~[lang] from beginning and ~~~ from end
     />
   </pre>
-)
+);
 
 const extractMarkdown = (section: string) => (
   <Markdown
@@ -31,16 +37,21 @@ const extractMarkdown = (section: string) => (
   >
     {section}
   </Markdown>
-)
+);
 
 const extractImage = (post: Post, filename: string, s3Client: S3Client) => (
   <img alt="media" src={s3Client.getMediaUrl(post, filename)} />
-)
+);
 
-const getAppropriate = (post: Post, section: string, style: any, s3Client: S3Client) => {
+const getAppropriate = (
+  post: Post,
+  section: string,
+  style: any,
+  s3Client: S3Client
+) => {
   // first match is whole string and second is
   const matches = section.match(/!\[([\w_\-\. ]+)\]/);
-  logger.debug(NAMESPACE, 'matches', matches)
+  logger.debug(NAMESPACE, 'matches', matches);
   if (matches?.length === 2) {
     return extractImage(post, matches[1], s3Client);
   } else if (section.startsWith('~~~') && section.endsWith('~~~')) {
@@ -48,7 +59,7 @@ const getAppropriate = (post: Post, section: string, style: any, s3Client: S3Cli
   } else {
     return extractMarkdown(section);
   }
-}
+};
 
 interface PostContentProps {
   post: Post;
@@ -59,7 +70,9 @@ const PostContent: FC<PostContentProps> = ({ post }: PostContentProps) => {
   // when the theme is switched
   const [style, setStyle] = useState(gruvboxDark);
   useEffect(() => {
-    setStyle(localStorage.getItem('theme') === 'dark' ? gruvboxDark : materialLight);
+    setStyle(
+      localStorage.getItem('theme') === 'dark' ? gruvboxDark : materialLight
+    );
   }, []);
 
   const content = useMemo(() => post?.content ?? '', [post]);

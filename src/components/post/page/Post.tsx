@@ -8,6 +8,8 @@ import { Post } from '../../../sdk/api/types';
 import { useAuth } from '../../../contexts/auth';
 import Spinner from '../../common/spinner/Spinner';
 import logger from '../../../logging';
+import EditModeToggle from './EditModeToggle';
+import PostEdit from './PostEdit';
 
 const NAMESPACE: string = 'components/post/Post.tsx';
 
@@ -17,6 +19,7 @@ const PostContainer: FC<PostContainerProps> = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState<boolean>(true);
   const [post, setPost] = useState<Post | null>(null);
+  const [editMode, setEditMode] = useState<boolean>(false);
   const apiClient = useApiClient();
   const { user } = useAuth();
 
@@ -63,7 +66,20 @@ const PostContainer: FC<PostContainerProps> = () => {
             author={'David Rosental'}
             status={post?.status ?? 'Published'}
           />
-          {post && <PostContent post={post} />}
+          {/* Logged in user can choose to edit the post */}
+          {user && (
+            <EditModeToggle
+              editMode={editMode}
+              toggleEditMode={() => setEditMode(!editMode)}
+            />
+          )}
+          {/* Not logged/not editing => show regular page. */}
+          {post &&
+            (!user || !editMode ? (
+              <PostContent post={post} />
+            ) : (
+              <PostEdit post={post} />
+            ))}
         </>
       ) : (
         <Spinner />
