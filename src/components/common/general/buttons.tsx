@@ -104,6 +104,19 @@ export const ArchiveButton: FC<ArchiveButtonProps> = ({
   />
 );
 
+interface PublishButtonProps extends ClickableProp {}
+
+export const PublishButton: FC<PublishButtonProps> = ({
+  onClick,
+}: PublishButtonProps) => (
+  <Button
+    text="Publish"
+    className="p-2 border-2 bg-blue-400 border-blue-400 hover:bg-mygrey-100 text-mygrey-100 hover:text-blue-400"
+    onClick={onClick}
+    hasModal
+  />
+);
+
 interface SaveButtonProps extends ClickableProp {}
 
 export const SaveButton: FC<SaveButtonProps> = ({

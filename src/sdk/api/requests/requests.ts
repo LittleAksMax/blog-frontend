@@ -39,6 +39,10 @@ export type ArchiveRequest = {
   id: string;
 };
 
+export type PublishRequest = {
+  id: string;
+};
+
 export type DeleteRequest = {
   id: string;
 };

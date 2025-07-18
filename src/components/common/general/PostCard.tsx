@@ -1,6 +1,11 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import { Post } from '../../../sdk/api/types';
-import { ArchiveButton, DeleteButton, UpdateButton } from './buttons';
+import {
+  ArchiveButton,
+  DeleteButton,
+  PublishButton,
+  UpdateButton,
+} from './buttons';
 import { useAuth } from '../../../contexts/auth';
 import { ChildrenProp } from '../../props';
 import { useS3 } from '../../../contexts/s3';
@@ -20,6 +25,7 @@ const PostCard: FC<PostCardProps> = ({
   withButtons,
   removePost,
   archivePost,
+  publishPost,
   children,
 }: PostCardProps) => {
   const { s3Client } = useS3();
@@ -63,7 +69,7 @@ const PostCard: FC<PostCardProps> = ({
               }
             }}
           />
-          {post.status !== 'Archived' && (
+          {post.status !== 'Archived' ? (
             <ArchiveButton
               onClick={async () => {
                 const success = await apiClient.archive(post);
@@ -74,6 +80,20 @@ const PostCard: FC<PostCardProps> = ({
                 // if there is an action to perform, then perform it
                 if (withButtons && archivePost) {
                   archivePost(post);
+                }
+              }}
+            />
+          ) : (
+            <PublishButton
+              onClick={async () => {
+                const success = await apiClient.publish(post);
+                if (!success) {
+                  alert('Could not publish post');
+                }
+
+                // if there is an action to perform, then perform it
+                if (withButtons && publishPost) {
+                  publishPost(post);
                 }
               }}
             />

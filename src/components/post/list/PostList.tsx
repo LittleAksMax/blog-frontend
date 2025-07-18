@@ -127,10 +127,6 @@ const PostListContainer: FC = () => {
             // filter out posts which don't match removed post
             setPosts(posts.filter((p) => p.id !== post.id));
           }}
-          archivePost={(post) => {
-            // filter out posts which don't match archived post
-            setPosts(posts.filter((p) => p.id !== post.id));
-          }}
         />
       ) : (
         <Spinner />

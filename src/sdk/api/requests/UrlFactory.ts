@@ -6,6 +6,7 @@ import {
   DeleteRequest,
   GetAllRequest,
   GetOneRequest,
+  PublishRequest,
   UpdateRequest,
 } from './requests';
 
@@ -16,6 +17,7 @@ export interface IUrlFactory {
   createCreateUrl(req: CreateRequest): string;
   createUpdateUrl(req: UpdateRequest): string;
   createArchiveUrl(req: ArchiveRequest): string;
+  createPublishUrl(req: PublishRequest): string;
   createDeleteUrl(req: DeleteRequest): string;
 }
 
@@ -71,6 +73,10 @@ class UrlFactory implements IUrlFactory {
 
   public createArchiveUrl(req: ArchiveRequest): string {
     return `${this.baseUrl}/api/${req.id}/archive`;
+  }
+
+  public createPublishUrl(req: PublishRequest): string {
+    return `${this.baseUrl}/api/${req.id}/publish`;
   }
 
   public createDeleteUrl(req: DeleteRequest) {
