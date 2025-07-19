@@ -54,6 +54,7 @@ const PostList: FC<PostListProps> = ({
   posts,
   removePost,
   archivePost,
+  publishPost,
 }: PostListProps) => {
   return (
     <ul>
@@ -64,6 +65,7 @@ const PostList: FC<PostListProps> = ({
             withButtons
             removePost={removePost}
             archivePost={archivePost}
+            publishPost={publishPost}
           />
         </PostListItem>
       ))}
@@ -126,6 +128,30 @@ const PostListContainer: FC = () => {
           removePost={(post) => {
             // filter out posts which don't match removed post
             setPosts(posts.filter((p) => p.id !== post.id));
+          }}
+          archivePost={(post) => {
+            setPosts(
+              posts.map((p) =>
+                p.id !== post.id
+                  ? p
+                  : {
+                      ...p,
+                      status: 'Archived',
+                    }
+              )
+            );
+          }}
+          publishPost={(post) => {
+            setPosts(
+              posts.map((p) =>
+                p.id !== post.id
+                  ? p
+                  : {
+                      ...p,
+                      status: 'Published',
+                    }
+              )
+            );
           }}
         />
       ) : (

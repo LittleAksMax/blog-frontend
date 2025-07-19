@@ -195,6 +195,7 @@ class BlogClient implements IBlogClient {
     const url: string = this.urlFactory.createArchiveUrl(req);
     const token = await this.firebaseAuth.currentUser?.getIdToken();
 
+    logger.debug(NAMESPACE, url);
     const [, err] = await makeRequest(PUT, url, token, req); // ignore data returned field
 
     if (err) {

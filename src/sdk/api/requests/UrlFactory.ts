@@ -72,11 +72,11 @@ class UrlFactory implements IUrlFactory {
   }
 
   public createArchiveUrl(req: ArchiveRequest): string {
-    return `${this.baseUrl}/api/${req.id}/archive`;
+    return `${this.baseUrl}/api/${this.version}/posts/${req.id}/archive`;
   }
 
   public createPublishUrl(req: PublishRequest): string {
-    return `${this.baseUrl}/api/${req.id}/publish`;
+    return `${this.baseUrl}/api/${this.version}/posts/${req.id}/publish`;
   }
 
   public createDeleteUrl(req: DeleteRequest) {
