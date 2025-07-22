@@ -14,6 +14,7 @@ import { ChildrenProp } from '../../props';
 import PostCard from '../../common/general/PostCard';
 import { PostDOMManipulation } from '../../common/general/interfaces';
 import PostsCollection from '../../../util/PostsTrie';
+import { generateSlug } from '../postUtil';
 
 const NAMESPACE = 'components/post/list/PostList.tsx';
 
@@ -59,10 +60,9 @@ const PageFilter: FC<PageFilterProps> = ({
       <input
         placeholder="Looking for something?"
         onChange={(e) => {
-          const searchTerm = e.target.value.trim();
-          setFilter(searchTerm.length === 0 ? null : searchTerm);
+          const searchTerm = e.target.value;
+          setFilter(searchTerm.length === 0 ? null : generateSlug(searchTerm));
         }}
-        value={filter ?? ''}
       />
     </div>
   );
@@ -101,6 +101,7 @@ const PostListItem: FC<PostListItemProps> = ({
   children,
 }: PostListItemProps) => <li>{children}</li>;
 
+// TODO: test if filter works
 const PostListContainer: FC = () => {
   const apiClient = useApiClient();
   const [loading, setLoading] = useState<boolean>(true);
