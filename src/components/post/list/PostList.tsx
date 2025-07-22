@@ -22,7 +22,6 @@ const START_PAGE = 1;
 const PAGE_SIZE = 10;
 
 interface PageFilterProps {
-  filter: string | null;
   setFilter: Dispatch<SetStateAction<string | null>>;
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
@@ -30,40 +29,103 @@ interface PageFilterProps {
 }
 
 const PageFilter: FC<PageFilterProps> = ({
-  filter,
   setFilter,
   page,
   setPage,
   numPages,
 }: PageFilterProps) => {
   return (
-    <div className="flex flex-row">
-      <button
-        disabled={page === 1}
-        onClick={() => {
-          setPage(page - 1);
-        }}
-      >
-        &lt;
-      </button>
-      <span>
-        <span>{page}</span> of <span>{numPages}</span>
-      </span>
-      <button
-        disabled={page === numPages}
-        onClick={() => {
-          setPage(page + 1);
-        }}
-      >
-        &gt;
-      </button>
-      <input
-        placeholder="Looking for something?"
-        onChange={(e) => {
-          const searchTerm = e.target.value;
-          setFilter(searchTerm.length === 0 ? null : generateSlug(searchTerm));
-        }}
-      />
+    <div className="px-[10%] min-h-[10vh] flex justify-center py-4">
+      <div className="flex flex-col gap-4 p-6 bg-mygrey-200 dark:bg-mygrey-700 rounded-lg shadow-sm max-w-4xl w-full">
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="search-input"
+            className="text-sm font-medium text-mygrey-700 dark:text-mygrey-100"
+          >
+            Search Posts
+          </label>
+          <input
+            id="search-input"
+            type="text"
+            placeholder="Looking for something?"
+            className="px-3 py-2 border border-mygrey-400 dark:border-mygrey-500 rounded-md focus:outline-none focus:ring-2 focus:ring-myorange-500 bg-mygrey-100 dark:bg-mygrey-600 dark:text-mygrey-100"
+            onChange={(e) => {
+              const searchTerm = e.target.value;
+              setFilter(
+                searchTerm.length === 0 ? null : generateSlug(searchTerm)
+              );
+            }}
+          />
+        </div>
+
+        <div className="flex flex-row gap-4 items-end">
+          <div className="flex flex-col gap-2 flex-1">
+            <label
+              htmlFor="tags-input"
+              className="text-sm font-medium text-mygrey-700 dark:text-mygrey-100"
+            >
+              Filter by Tags
+            </label>
+            <input
+              id="tags-input"
+              type="text"
+              placeholder="Enter tags separated by commas"
+              className="px-3 py-2 border border-mygrey-400 dark:border-mygrey-500 rounded-md focus:outline-none focus:ring-2 focus:ring-myorange-500 bg-mygrey-100 dark:bg-mygrey-600 dark:text-mygrey-100"
+              onChange={(e) => {
+                // TODO: Implement tag filtering functionality
+                console.log('Tags filter:', e.target.value);
+              }}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2 flex-1">
+            <label
+              htmlFor="collections-select"
+              className="text-sm font-medium text-mygrey-700 dark:text-mygrey-100"
+            >
+              Filter by Collection
+            </label>
+            <select
+              id="collections-select"
+              className="px-3 py-2 border border-mygrey-400 dark:border-mygrey-500 rounded-md focus:outline-none focus:ring-2 focus:ring-myorange-500 bg-mygrey-100 dark:bg-mygrey-600 dark:text-mygrey-100"
+              onChange={(e) => {
+                // TODO: Implement collection filtering functionality
+              }}
+            >
+              <option value="">All Collections</option>
+              {/* TODO: Populate with actual collections */}
+              <option value="tech">Tech</option>
+              <option value="personal">Personal</option>
+              <option value="tutorials">Tutorials</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="flex flex-row justify-center items-center gap-4 mt-2">
+          <button
+            disabled={page === 1}
+            onClick={() => {
+              setPage(page - 1);
+            }}
+            className="px-4 py-2 bg-myorange-500 text-mygrey-100 rounded-md disabled:bg-mygrey-400 disabled:cursor-not-allowed hover:bg-myorange-600 transition-colors"
+          >
+            Previous
+          </button>
+          <span className="text-sm font-medium text-mygrey-700 dark:text-mygrey-100">
+            Page <span className="font-bold">{page}</span> of{' '}
+            <span className="font-bold">{numPages}</span>
+          </span>
+          <button
+            disabled={page === numPages}
+            onClick={() => {
+              setPage(page + 1);
+            }}
+            className="px-4 py-2 bg-myorange-500 text-mygrey-100 rounded-md disabled:bg-mygrey-400 disabled:cursor-not-allowed hover:bg-myorange-600 transition-colors"
+          >
+            Next
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
@@ -99,7 +161,7 @@ interface PostListItemProps extends ChildrenProp {}
 
 const PostListItem: FC<PostListItemProps> = ({
   children,
-}: PostListItemProps) => <li>{children}</li>;
+}: PostListItemProps) => <li className="mb-6 px-4">{children}</li>;
 
 // TODO: test if filter works
 const PostListContainer: FC = () => {
@@ -159,7 +221,6 @@ const PostListContainer: FC = () => {
   return (
     <div className="mv-[1/4]">
       <PageFilter
-        filter={filter}
         setFilter={setFilter}
         page={page}
         setPage={setPage}

@@ -42,18 +42,29 @@ const PostCard: FC<PostCardProps> = ({
   const url = useMemo(() => `/posts/${post.id}`, [post]);
 
   return (
-    <div>
-      <div>
-        <a href={url}>
-          <img src={imageUrl} alt={post.title} />
-          <span>
-            {post.title + (post.status === 'Archived' ? ' (archived)' : '')}
-          </span>
-          <div>{children}</div>
+    <div className="bg-mygrey-100 dark:bg-mygrey-600 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border border-mygrey-300 dark:border-mygrey-500">
+      <div className="group">
+        <a href={url} className="block">
+          <div className="relative overflow-hidden">
+            <img
+              src={imageUrl}
+              alt={post.title}
+              className="w-64 h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-myorange-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+          </div>
+          <div className="p-4 group-hover:bg-myorange-50 dark:group-hover:bg-mygrey-700 transition-colors duration-300">
+            <h3 className="text-lg font-semibold text-mygrey-800 dark:text-mygrey-100 group-hover:text-myorange-600 dark:group-hover:text-myorange-400 transition-colors duration-300 mb-2">
+              {post.title + (post.status === 'Archived' ? ' (archived)' : '')}
+            </h3>
+            <div className="text-mygrey-600 dark:text-mygrey-300">
+              {children}
+            </div>
+          </div>
         </a>
       </div>
       {withButtons && auth.user && (
-        <div className="flex flex-row">
+        <div className="flex flex-row gap-2 p-4 bg-mygrey-50 dark:bg-mygrey-700 border-t border-mygrey-200 dark:border-mygrey-600">
           {/* TODO: update button implementations */}
           <UpdateButton />
           <DeleteButton
