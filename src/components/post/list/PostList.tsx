@@ -26,6 +26,8 @@ interface PageFilterProps {
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
   numPages: number;
+  availableTags: string[];
+  setTags: Dispatch<SetStateAction<string[]>>;
 }
 
 const PageFilter: FC<PageFilterProps> = ({
@@ -33,6 +35,8 @@ const PageFilter: FC<PageFilterProps> = ({
   page,
   setPage,
   numPages,
+  availableTags,
+  setTags,
 }: PageFilterProps) => {
   return (
     <div className="px-[10%] min-h-[10vh] flex justify-center py-4">
@@ -61,42 +65,22 @@ const PageFilter: FC<PageFilterProps> = ({
         <div className="flex flex-row gap-4 items-end">
           <div className="flex flex-col gap-2 flex-1">
             <label
-              htmlFor="tags-input"
-              className="text-sm font-medium text-mygrey-700 dark:text-mygrey-100"
-            >
-              Filter by Tags
-            </label>
-            <input
-              id="tags-input"
-              type="text"
-              placeholder="Enter tags separated by commas"
-              className="px-3 py-2 border border-mygrey-400 dark:border-mygrey-500 rounded-md focus:outline-none focus:ring-2 focus:ring-myorange-500 bg-mygrey-100 dark:bg-mygrey-600 dark:text-mygrey-100"
-              onChange={(e) => {
-                // TODO: Implement tag filtering functionality
-                console.log('Tags filter:', e.target.value);
-              }}
-            />
-          </div>
-
-          <div className="flex flex-col gap-2 flex-1">
-            <label
               htmlFor="collections-select"
               className="text-sm font-medium text-mygrey-700 dark:text-mygrey-100"
             >
-              Filter by Collection
+              Filter by Tags
             </label>
             <select
               id="collections-select"
               className="px-3 py-2 border border-mygrey-400 dark:border-mygrey-500 rounded-md focus:outline-none focus:ring-2 focus:ring-myorange-500 bg-mygrey-100 dark:bg-mygrey-600 dark:text-mygrey-100"
               onChange={(e) => {
-                // TODO: Implement collection filtering functionality
+                setTags(Array.from(e.target.selectedOptions, option => option.value));
               }}
+              multiple
             >
-              <option value="">All Collections</option>
-              {/* TODO: Populate with actual collections */}
-              <option value="tech">Tech</option>
-              <option value="personal">Personal</option>
-              <option value="tutorials">Tutorials</option>
+              {availableTags.map(tag => (
+                <option key={tag} value={tag.toLowerCase()}>{tag.toLowerCase()}</option>
+              ))}
             </select>
           </div>
         </div>
@@ -171,6 +155,7 @@ const PostListContainer: FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [numPages, setNumPages] = useState<number>(1);
   const [filter, setFilter] = useState<string | null>(null);
+  const [tags, setTags] = useState<string[]>([]); // NOTE: empty list means no filter on tag
 
   const postsTrie = useMemo(() => {
     const coll = new PostsCollection();
@@ -180,9 +165,31 @@ const PostListContainer: FC = () => {
     return coll;
   }, [posts]);
 
+  const allTags = useMemo(() => {
+    // Extract tags from posts
+    let tags: Set<string> = new Set();
+    for (const post of posts) {
+      for (const tag of post.tags) {
+        tags.add(tag);
+      }
+    }
+    return Array.from(tags.values());
+  }, [posts]);
+
   const activePosts = useMemo<Post[]>(
-    () => postsTrie.getAllWithPrefix(filter ?? ''),
-    [filter, postsTrie]
+    () => {
+      // Get posts filtered by name
+      let filteredPosts = postsTrie.getAllWithPrefix(filter ?? '');
+
+      // No tags means no filtering on tags
+      if (tags.length === 0) {
+        return filteredPosts;
+      }
+    
+      // Otherwise, filter remaining posts by tags
+      return filteredPosts.filter(post => tags.every(tag => post.tags.includes(tag)));
+    },
+    [filter, tags, postsTrie]
   );
 
   useEffect(() => {
@@ -225,6 +232,8 @@ const PostListContainer: FC = () => {
         page={page}
         setPage={setPage}
         numPages={numPages}
+        availableTags={allTags}
+        setTags={setTags}
       />
       {!loading ? (
         <PostList
