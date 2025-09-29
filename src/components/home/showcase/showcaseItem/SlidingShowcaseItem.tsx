@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Post } from '../../../../sdk/api/types';
 import PostCard, { PostCardProps } from '../../../common/general/PostCard';
+import TagsContainer from '../../../common/tags/TagsContainer';
 
 interface SlidingShowcaseItemProps extends PostCardProps {
   post: Post;
@@ -14,13 +15,17 @@ const SlidingShowcaseItem: FC<SlidingShowcaseItemProps> = ({
   if (!main) {
     return (
       <div className="scale-75 h-full">
-        <PostCard post={post} />
+        <PostCard post={post}>
+          <TagsContainer tags={post.tags} limit={3} />
+        </PostCard>
       </div>
     );
   } else {
     return (
       <div className="h-full">
-        <PostCard post={post} />
+        <PostCard post={post}>
+          <TagsContainer tags={post.tags} limit={3} />
+        </PostCard>
       </div>
     );
   }

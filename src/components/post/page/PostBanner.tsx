@@ -8,30 +8,9 @@ import { useAuth } from '../../../contexts/auth';
 import { useApiClient } from '../../../contexts/api';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { PostStatusType } from '../../../sdk/api/types';
-
-interface TagPillProps {
-  tag: string;
-}
-
-const TagPill: FC<TagPillProps> = ({ tag }: TagPillProps) => (
-  <li className="p-1 m-1 first:ml-0 bg-myorange-500 text-mygrey-100 font-semibold text-sm rounded-lg">
-    {tag.toUpperCase()}
-  </li>
-);
-
-interface TagsContainerProps {
-  tags: string[];
-}
-
-const TagsContainer: FC<TagsContainerProps> = ({
-  tags,
-}: TagsContainerProps) => (
-  <ul className="flex flex-row flex-wrap">
-    {tags.map((tag: string, idx: number) => (
-      <TagPill key={idx} tag={tag} />
-    ))}
-  </ul>
-);
+import TagsContainer, {
+  TagsContainerProps,
+} from '../../common/tags/TagsContainer';
 
 interface TitleProps {
   title: string;
@@ -81,7 +60,7 @@ const Title: FC<TitleProps> = ({
   ) : (
     <h1
       className="font-semibold text-lg text-myorange-600 dark:text-myorange-400"
-      onClick={(e) => setIsEditing(true)}
+      onClick={() => setIsEditing(true)}
     >
       {titleContent}
     </h1>

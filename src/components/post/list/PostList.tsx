@@ -15,6 +15,7 @@ import PostCard from '../../common/general/PostCard';
 import { PostDOMManipulation } from '../../common/general/interfaces';
 import PostsCollection from '../../../util/PostsTrie';
 import { generateSlug } from '../postUtil';
+import TagsContainer from '../../common/tags/TagsContainer';
 
 const NAMESPACE = 'components/post/list/PostList.tsx';
 
@@ -138,7 +139,9 @@ const PostList: FC<PostListProps> = ({
             removePost={removePost}
             archivePost={archivePost}
             publishPost={publishPost}
-          />
+          >
+            <TagsContainer tags={post.tags} limit={5} />
+          </PostCard>
         </PostListItem>
       ))}
     </ul>
