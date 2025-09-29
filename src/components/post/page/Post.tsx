@@ -10,6 +10,10 @@ import Spinner from '../../common/spinner/Spinner';
 import logger from '../../../logging';
 import EditModeToggle from './EditModeToggle';
 import PostEdit from './PostEdit';
+import {
+  gruvboxDark,
+  materialLight,
+} from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const NAMESPACE: string = 'components/post/Post.tsx';
 
@@ -22,6 +26,15 @@ const PostContainer: FC<PostContainerProps> = () => {
   const [editMode, setEditMode] = useState<boolean>(false);
   const apiClient = useApiClient();
   const { user } = useAuth();
+  const [style, setStyle] = useState(gruvboxDark);
+
+  // styling of code, this is lazy and doesn't toggle automatically
+  // when the theme is switched
+  useEffect(() => {
+    setStyle(
+      localStorage.getItem('theme') === 'dark' ? gruvboxDark : materialLight
+    );
+  }, []);
 
   useEffect(() => {
     if (!id) {
@@ -78,9 +91,9 @@ const PostContainer: FC<PostContainerProps> = () => {
           {/* Not logged/not editing => show regular page. */}
           {post &&
             (!user || !editMode ? (
-              <PostContent post={post} />
+              <PostContent post={post} style={style} />
             ) : (
-              <PostEdit post={post} />
+              <PostEdit post={post} apiClient={apiClient} style={style} />
             ))}
         </>
       ) : (

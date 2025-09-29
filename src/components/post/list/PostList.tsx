@@ -74,12 +74,16 @@ const PageFilter: FC<PageFilterProps> = ({
               id="collections-select"
               className="px-3 py-2 border border-mygrey-400 dark:border-mygrey-500 rounded-md focus:outline-none focus:ring-2 focus:ring-myorange-500 bg-mygrey-100 dark:bg-mygrey-600 dark:text-mygrey-100"
               onChange={(e) => {
-                setTags(Array.from(e.target.selectedOptions, option => option.value));
+                setTags(
+                  Array.from(e.target.selectedOptions, (option) => option.value)
+                );
               }}
               multiple
             >
-              {availableTags.map(tag => (
-                <option key={tag} value={tag.toLowerCase()}>{tag.toLowerCase()}</option>
+              {availableTags.map((tag) => (
+                <option key={tag} value={tag.toLowerCase()}>
+                  {tag.toLowerCase()}
+                </option>
               ))}
             </select>
           </div>
@@ -176,21 +180,22 @@ const PostListContainer: FC = () => {
     return Array.from(tags.values());
   }, [posts]);
 
-  const activePosts = useMemo<Post[]>(
-    () => {
-      // Get posts filtered by name
-      let filteredPosts = postsTrie.getAllWithPrefix(filter ?? '');
+  const activePosts = useMemo<Post[]>(() => {
+    // Get posts filtered by name
+    let filteredPosts = postsTrie.getAllWithPrefix(filter ?? '');
 
-      // No tags means no filtering on tags
-      if (tags.length === 0) {
-        return filteredPosts;
-      }
-    
-      // Otherwise, filter remaining posts by tags
-      return filteredPosts.filter(post => tags.every(tag => post.tags.includes(tag)));
-    },
-    [filter, tags, postsTrie]
-  );
+    // No tags means no filtering on tags
+    if (tags.length === 0) {
+      return filteredPosts;
+    }
+
+    // Otherwise, filter remaining posts by tags
+    return filteredPosts.filter((post) =>
+      tags.every((tag) => post.tags.includes(tag))
+    );
+  }, [filter, tags, postsTrie]);
+
+  logger.debug(NAMESPACE, 'Posts', posts);
 
   useEffect(() => {
     setLoading(true);

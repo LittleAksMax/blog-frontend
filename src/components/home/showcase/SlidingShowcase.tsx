@@ -3,7 +3,8 @@ import { ShowcaseProps } from './common';
 import { ClickableProp } from '../../props';
 import { Post } from '../../../sdk/api/types';
 import SlidingShowcaseItem from './showcaseItem/SlidingShowcaseItem';
-import logger from '../../../logging';
+
+// const NAMESPACE: string = 'SlidingShowcase';
 
 interface SlideshowPositionProps {
   index: number; // position (from 0)  (array index)
@@ -49,8 +50,6 @@ const doesPostExist = (posts: Post[], index: number): boolean =>
 
 const relativeSlideIndices = [-1, 0, 1];
 
-const NAMESPACE: string = 'SlidingShowcase';
-
 interface SlidingShowcaseProps extends ShowcaseProps {}
 
 const SlidingShowcase: FC<SlidingShowcaseProps> = ({
@@ -59,16 +58,10 @@ const SlidingShowcase: FC<SlidingShowcaseProps> = ({
   const [index, setIndex] = useState<number>(0);
   const showcasePosts = useMemo(() => posts, [posts]);
 
-  for (const post of showcasePosts) {
-    logger.debug(NAMESPACE, post.status);
-  }
-
   if (!showcasePosts.every((post) => post.status === 'Published')) {
-    logger.debug(NAMESPACE, 'HERE');
     throw new Error('All posts in showcase must be published.');
   }
 
-  // TODO: small screens => move change slide onto next line
   if (showcasePosts.length === 0) {
     return (
       <div>
