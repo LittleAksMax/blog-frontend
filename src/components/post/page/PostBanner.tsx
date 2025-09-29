@@ -1,9 +1,8 @@
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArchiveButton,
   BackButton,
   DeleteButton,
-  UpdateButton,
 } from '../../common/general/buttons';
 import { useAuth } from '../../../contexts/auth';
 import { useApiClient } from '../../../contexts/api';
@@ -36,13 +35,58 @@ const TagsContainer: FC<TagsContainerProps> = ({
 
 interface TitleProps {
   title: string;
+  status: PostStatusType;
+  editable?: boolean;
+  updateTitle: (newTitle: string) => Promise<boolean>;
 }
 
-const Title: FC<TitleProps> = ({ title }: TitleProps) => (
-  <h1 className="font-semibold text-lg text-myorange-600 dark:text-myorange-400">
-    {title}
-  </h1>
-);
+const Title: FC<TitleProps> = ({
+  title,
+  editable,
+  updateTitle,
+}: TitleProps) => {
+  const [isEditing, setIsEditing] = useState<boolean>(editable ?? false);
+  const [titleContent, setTitleContent] = useState<string>(title);
+  const titleRef = useRef<HTMLInputElement>(null!);
+
+  useEffect(() => {
+    if (isEditing && titleRef.current) {
+      titleRef.current.focus();
+      titleRef.current.setSelectionRange(
+        titleRef.current.value.length,
+        titleRef.current.value.length
+      );
+    }
+  }, [isEditing]);
+
+  return editable && isEditing ? (
+    <div className="p-2 rounded focus-within:outline focus-within:outline-2 focus-within:outline-myorange-600 dark:focus-within:outline-myorange-400">
+      <input
+        ref={titleRef}
+        className="w-auto h-auto focus:outline-none font-semibold text-lg bg-transparent text-myorange-600 dark:text-myorange-400"
+        value={titleContent}
+        onChange={(e) => {
+          setTitleContent(e.target.value);
+        }}
+        onBlur={async () => {
+          const success = await updateTitle(titleContent);
+          setIsEditing(false);
+
+          if (!success) {
+            alert('Could not update title.');
+          }
+        }}
+      />
+    </div>
+  ) : (
+    <h1
+      className="font-semibold text-lg text-myorange-600 dark:text-myorange-400"
+      onClick={(e) => setIsEditing(true)}
+    >
+      {titleContent}
+    </h1>
+  );
+};
 
 interface PostDateProps {
   label: string;
@@ -100,7 +144,7 @@ interface PostBannerProps
     DatesContainerProps,
     AuthorProps {
   id: string;
-  status: PostStatusType;
+  updateTitle: (newTitle: string) => Promise<boolean>;
 }
 
 const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
@@ -127,7 +171,12 @@ const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-2">
-        <Title title={title + (status === 'Archived' ? ' (archived)' : '')} />
+        <Title
+          title={title}
+          status={status}
+          updateTitle={props.updateTitle}
+          editable
+        />
         <BackButton
           text="Back to all posts"
           onClick={() => {
@@ -140,17 +189,11 @@ const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
       <Author author={author} />
       {auth.user !== null && (
         <div className="flex flex-row">
-          <UpdateButton
-            onClick={async () => {
-              // TODO: implement
-              console.log('Update');
-            }}
-          />
           <DeleteButton
             onClick={async () => {
               const success = await apiClient.delete({ id });
               if (!success) {
-                alert('Could not delete post');
+                alert('Could not delete post.');
               }
               setShouldRedirect(true);
             }}
@@ -160,7 +203,7 @@ const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
               onClick={async () => {
                 const success = await apiClient.archive({ id });
                 if (!success) {
-                  alert('Could not archive post');
+                  alert('Could not archive post.');
                 }
                 setShouldRedirect(true);
               }}

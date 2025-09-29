@@ -1,11 +1,6 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import { Post } from '../../../sdk/api/types';
-import {
-  ArchiveButton,
-  DeleteButton,
-  PublishButton,
-  UpdateButton,
-} from './buttons';
+import { ArchiveButton, DeleteButton, PublishButton } from './buttons';
 import { useAuth } from '../../../contexts/auth';
 import { ChildrenProp } from '../../props';
 import { useS3 } from '../../../contexts/s3';
@@ -65,13 +60,11 @@ const PostCard: FC<PostCardProps> = ({
       </div>
       {withButtons && auth.user && (
         <div className="flex flex-row gap-2 p-4 bg-mygrey-50 dark:bg-mygrey-700 border-t border-mygrey-200 dark:border-mygrey-600">
-          {/* TODO: update button implementations */}
-          <UpdateButton />
           <DeleteButton
             onClick={async () => {
               const success = await apiClient.delete({ id: post.id });
               if (!success) {
-                alert('Could not delete post');
+                alert('Could not delete post.');
               }
 
               // if there is an action to perform, then perform it
@@ -85,7 +78,7 @@ const PostCard: FC<PostCardProps> = ({
               onClick={async () => {
                 const success = await apiClient.archive(post);
                 if (!success) {
-                  alert('Could not archive post');
+                  alert('Could not archive post.');
                 }
 
                 // if there is an action to perform, then perform it
@@ -99,7 +92,7 @@ const PostCard: FC<PostCardProps> = ({
               onClick={async () => {
                 const success = await apiClient.publish(post);
                 if (!success) {
-                  alert('Could not publish post');
+                  alert('Could not publish post.');
                 }
 
                 // if there is an action to perform, then perform it

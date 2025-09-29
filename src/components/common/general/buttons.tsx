@@ -23,10 +23,7 @@ const Button: FC<ButtonProps> = ({
             <div>
               <button
                 className="p-2 border-2 border-mygrey-400 bg-mygrey-400"
-                onClick={() => {
-                  if (onClick) onClick();
-                  setModalOpen(false);
-                }}
+                onClick={() => setModalOpen(false)}
               >
                 Cancel
               </button>

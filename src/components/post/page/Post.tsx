@@ -78,6 +78,11 @@ const PostContainer: FC<PostContainerProps> = () => {
             lastModified={post?.lastUpdated ?? new Date(0)}
             author={'David Rosental'}
             status={post?.status ?? 'Published'}
+            updateTitle={async (newTitle) => {
+              return post
+                ? apiClient.update({ ...post, title: newTitle })
+                : false;
+            }}
           />
           {/* Logged in user can choose to edit the post */}
           {user && (

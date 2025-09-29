@@ -17,7 +17,7 @@ const PostEditSection: FC<PostEditSectionProps> = ({
   onChange,
 }: PostEditSectionProps) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null!);
 
   useEffect(() => {
     if (isEditing && textareaRef.current) {
@@ -65,7 +65,7 @@ const PostEdit: FC<PostContentProps> = ({
       {content.map((line, idx) => (
         <div
           key={idx}
-          className="w-[80%] focus-within:outline focus-within:outline-2 focus-within:outline-blue-500 p-2 rounded"
+          className="w-[80%] focus-within:outline focus-within:outline-2 focus-within:outline-myorange-600 dark:focus-within:outline-myorange-400 p-2 rounded"
         >
           <PostEditSection
             content={line}
@@ -85,12 +85,19 @@ const PostEdit: FC<PostContentProps> = ({
         {changesMade && (
           <>
             <SaveButton
-              onClick={() => {
+              onClick={async () => {
                 // Save changes in S3
-                apiClient.update({ ...post, content: content.join('\n\n') });
+                const success = await apiClient.update({
+                  ...post,
+                  content: content.join('\n\n'),
+                });
 
                 // Reset changes made to reflect
                 setChangesMade(false);
+
+                if (!success) {
+                  alert('Could not save post changes.');
+                }
               }}
             />
             <CancelButton
