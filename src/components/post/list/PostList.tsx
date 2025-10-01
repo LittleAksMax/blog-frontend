@@ -6,7 +6,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { Post } from '../../../sdk/api/types';
+import { Post, PostStatusType } from '../../../sdk/api/types';
 import { useApiClient } from '../../../contexts/api';
 import logger from '../../../logging';
 import Spinner from '../../common/spinner/Spinner';
@@ -154,8 +154,13 @@ const PostListItem: FC<PostListItemProps> = ({
   children,
 }: PostListItemProps) => <li className="mb-6 px-4">{children}</li>;
 
-// TODO: test if filter works
-const PostListContainer: FC = () => {
+interface PostListContainerProps {
+  status?: PostStatusType;
+}
+
+const PostListContainer: FC<PostListContainerProps> = ({
+  status,
+}: PostListContainerProps) => {
   const apiClient = useApiClient();
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(START_PAGE);
@@ -197,8 +202,6 @@ const PostListContainer: FC = () => {
       tags.every((tag) => post.tags.includes(tag))
     );
   }, [filter, tags, postsTrie]);
-
-  logger.debug(NAMESPACE, 'Posts', posts);
 
   useEffect(() => {
     setLoading(true);

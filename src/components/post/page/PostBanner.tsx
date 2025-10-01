@@ -163,7 +163,7 @@ const PostBanner: FC<PostBannerProps> = (props: PostBannerProps) => {
           }}
         />
       </div>
-      <TagsContainer tags={tags} />
+      <TagsContainer tags={tags} editable />
       <DatesContainer published={published} lastModified={lastModified} />
       <Author author={author} />
       {auth.user !== null && (

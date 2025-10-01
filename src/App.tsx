@@ -11,9 +11,9 @@ import ApiProvider from './providers/ApiProvider';
 import { IBlogClient } from './sdk/api/client';
 import Posts from './routes/posts/Posts';
 import PostEditor from './routes/update/PostEditor';
-import CreatePost from './routes/create/CreatePost';
 import S3Provider from './providers/S3Provider';
 import S3Client from './sdk/s3/client';
+import Drafts from './routes/posts/Drafts';
 
 interface AppProps {
   auth: FirebaseAuth;
@@ -35,12 +35,12 @@ const App: FC<AppProps> = ({
           <Router>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/posts/create" element={<CreatePost />} />
               <Route path="/posts/:id/editor" element={<PostEditor />} />
               <Route path="/posts/:id" element={<Post />} />
               <Route path="/login" element={<Login />} />
               <Route path="/logout" element={<Logout />} />
               <Route path="/posts" element={<Posts />} />
+              <Route path="/drafts" element={<Drafts />} />
 
               <Route path="*" element={<NotFound />} />
             </Routes>

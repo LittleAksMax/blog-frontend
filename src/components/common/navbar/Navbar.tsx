@@ -65,7 +65,6 @@ const Navbar: FC = () => {
   const { user } = useAuth();
   const [mode, setMode] = useState<ThemeType | undefined>(undefined);
 
-  // logger.debug(NAMESPACE, 'Auth handler', auth);
   return (
     <nav className="flex justify-evenly bg-mygrey-300 dark:bg-mygrey-700 p-4 dark:text-mygrey-100">
       <NavbarPartition side="left">
@@ -87,6 +86,11 @@ const Navbar: FC = () => {
             <NavbarLink href="/logout" value="Log out" />
           )}
         </NavbarSlot>
+        {user && (
+          <NavbarSlot>
+            <NavbarLink href="/drafts" value="Drafts" />
+          </NavbarSlot>
+        )}
       </NavbarPartition>
     </nav>
   );
